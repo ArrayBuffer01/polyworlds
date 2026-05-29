@@ -1,3 +1,7 @@
+<script>
+	import { enhance } from "$app/forms";
+
+</script>
 <div class="flex h-screen items-center justify-center">
 	<div
 		class="border-neutral-250 flex h-auto w-sm flex-col space-y-3 rounded-md border bg-white p-5 pl-6"
@@ -14,20 +18,20 @@
 			</div>
 		</div>
 
-		<form action="#">
-			<label for="email" class="text-left font-bold">Email</label>
+		<form action="?/login" method="POST" use:enhance>
+			<label for="username" class="text-left font-bold">Username</label>
 			<input
 				type="text"
-				id="email"
-				name="email"
-				placeholder="email@example.com"
+				id="username"
+				name="username"
+				placeholder="Username here..."
 				class="border-neutral-250 mt-1 mb-6 w-full rounded-sm border-1 p-1 pl-3"
 			/>
 			<label for="pass" class="text-left font-bold">Password</label>
 			<input
 				type="password"
-				id="pass"
-				name="pass"
+				id="password"
+				name="password"
 				class="border-neutral-250 mt-1 mb-8 w-full rounded-sm border-1 p-1 pl-3"
 			/>
 			<input
