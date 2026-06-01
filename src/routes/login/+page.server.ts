@@ -1,5 +1,6 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { invalidateAll } from "$app/navigation";
 
 export const load = (async () => {
   return {};
@@ -17,7 +18,7 @@ export const actions = {
         path: "/"
       });
       console.log("Pass");
-      redirect(300, "/dash");
+      return redirect(300, "/dash");
     }
   }
 } satisfies Actions;

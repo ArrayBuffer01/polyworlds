@@ -1,12 +1,12 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
 
 @theme {
-	--color-plw-gray: #f5f5f5;
-	--color-plw-white: #f8f9fa;
-	--color-plw-black: #212529;
-	--color-plw-red: #dc1834;
-	--color-neutral-150: #efefef;
-	--color-neutral-250: #dfdfdf;
+  --color-plw-gray: #f5f5f5;
+  --color-plw-white: #f8f9fa;
+  --color-plw-black: #212529;
+  --color-plw-red: #dc1834;
+  --color-neutral-150: #efefef;
+  --color-neutral-250: #dfdfdf;
 }
