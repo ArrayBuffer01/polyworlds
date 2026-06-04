@@ -5,51 +5,54 @@
   let dropdownOpen = $state(false);
 </script>
 
-<nav class="fixed flex h-15 w-screen justify-center bg-plw-white">
-  <div class="flex h-full w-300 items-center justify-between text-white">
+<nav class="flex h-15 w-screen justify-center bg-plw-red">
+  <div class="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 text-white">
     <!-- Aligned left -->
     <div class="flex items-center">
       <a href={appState.user ? "/dash" : "/"} class="flex cursor-pointer items-center p-1">
         <img alt="Logo" src="/logo.png" class="h-15 w-15 select-none" />
-        <h2 class="ml-5 text-xl font-extrabold text-plw-black select-none">Polyworlds</h2>
+        <h2 class="ml-5 text-xl font-extrabold text-plw-white select-none">Polyworlds</h2>
       </a>
       <span class="w-8"></span>
 
       <!-- Main nav buttons -->
       <div class="flex h-full">
-        <button
-          class="flex h-15 cursor-pointer items-center bg-plw-white px-4 font-semibold text-plw-black transition duration-200 select-none hover:bg-neutral-150"
+        <a
+          href="/worlds"
+          class="hover:bg-plw-red-dark flex h-15 cursor-pointer items-center bg-plw-red px-4 font-semibold text-plw-white transition duration-200 select-none"
         >
           <i class="fa fa-gamepad"></i><span class="ml-2">Worlds</span>
-        </button>
-        <button
-          class="flex h-15 cursor-pointer items-center bg-plw-white px-4 font-semibold text-plw-black transition duration-200 select-none hover:bg-neutral-150"
+        </a>
+        <a
+          href="/groups"
+          class="hover:bg-plw-red-dark flex h-15 cursor-pointer items-center bg-plw-red px-4 font-semibold text-plw-white transition duration-200 select-none"
         >
           <i class="fa fa-home"></i><span class="ml-2">Groups</span>
-        </button>
-        <button
-          class="flex h-15 cursor-pointer items-center bg-plw-white px-4 font-semibold text-plw-black transition duration-200 select-none hover:bg-neutral-150"
+        </a>
+        <a
+          href="/catalog"
+          class="hover:bg-plw-red-dark flex h-15 cursor-pointer items-center bg-plw-red px-4 font-semibold text-plw-white transition duration-200 select-none"
         >
           <i class="fa fa-shopping-basket"></i><span class="ml-2">Catalog</span>
-        </button>
-        <button
-          class="flex h-15 cursor-pointer items-center bg-plw-white px-4 font-semibold text-plw-black transition duration-200 select-none hover:bg-neutral-150"
+        </a>
+        <a
+          href="/forums"
+          class="hover:bg-plw-red-dark flex h-15 cursor-pointer items-center bg-plw-red px-4 font-semibold text-plw-white transition duration-200 select-none"
         >
-        
           <i class="fa-solid fa-comment-dots"></i><span class="ml-2">Forums</span>
-        </button>
+        </a>
       </div>
     </div>
 
     <!-- Aligned right -->
     {#if appState.user}
       <div class="flex items-center">
-        <p class="font-semibold text-plw-black">
+        <p class="font-semibold text-plw-white">
           <i class="fa fa-fire text-amber-500"></i>
           <span class="ml-2 text-amber-500 select-none">{appState.user.gold}</span>
         </p>
         <span class="w-4"></span>
-        <p class="font-semibold text-plw-black">
+        <p class="font-semibold text-plw-white">
           <i class="fa fa-coins text-green-400"></i>
           <span class="ml-2 text-green-400 select-none">{appState.user.coins}</span>
         </p>
@@ -59,13 +62,13 @@
         <div class="relative" id="dropdown-wrapper">
           <button
             id="dropdown-button"
-            class="flex h-15 cursor-pointer items-center p-3 font-semibold text-plw-black transition duration-200 select-none hover:bg-neutral-150"
+            class="flex h-15 cursor-pointer items-center p-3 font-semibold text-plw-white transition duration-200 select-none hover:bg-red-600"
             onclick={() => (dropdownOpen = !dropdownOpen)}
           >
             <span>{appState.user.username}</span>
             <img
               alt="Profile"
-              src="profile.png"
+              src="/profile.png"
               class="ml-2 h-10 w-10 rounded-full border border-neutral-250"
             />
           </button>
