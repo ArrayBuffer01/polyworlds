@@ -13,11 +13,16 @@
   import { invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
   import { Separator } from "$lib/components/ui/separator";
+  import * as Dialog from "$lib/components/ui/dialog";
 
   let { data }: PageProps = $props();
 
+  // Modal state
+  let open = $state(false);
+
   // Daily Reward states
   let now = $state(Date.now());
+  let rewardPending = $state(false);
   let lastReward = $derived(data.lastReward?.getTime() || 0);
   const msUntilNextReward = $derived(!lastReward ? 0 : Math.max(0, lastReward + ONE_DAY - now));
   const rewardAvailable = $derived<boolean>(!lastReward || msUntilNextReward === 0);
@@ -51,6 +56,7 @@
 
     if (rewardAvailable) {
       clearIntv();
+      open = true;
     } else {
       setupIntv();
     }
@@ -61,6 +67,20 @@
       if (intv) clearInterval(intv);
     };
   });
+
+  async function claim() {
+    const result = await claimReward();
+    if (result.success && result.lastReward && appState.user) {
+      // Update currency
+      /*appState.user.coins = result.coins;
+      appState.user.gold = result.gold;*/
+
+      // For now invalidate all page data. It's fine!
+      await invalidateAll();
+    }
+
+    return result;
+  }
 
   const appState = getAppContext();
 </script>
@@ -79,6 +99,32 @@
       </h1>
     </div>
 
+    <Dialog.Root bind:open>
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title>Daily Reward</Dialog.Title>
+          <Dialog.Description>
+            Your Daily Reward is available for claim! You can claim it now or later!
+            <Button
+            class="mt-2 w-full"
+            onclick={async () => {
+              await claim();
+              open = false;
+            }}>Claim Reward</Button
+          >
+          <Button
+            class="mt-2 w-full"
+            variant="secondary"
+            onclick={async () => {
+              await claim();
+              open = false;
+            }}>Not Now</Button
+          >
+          </Dialog.Description>
+        </Dialog.Header>
+      </Dialog.Content>
+    </Dialog.Root>
+
     <Separator class="mt-2" />
     
     <Card.Root class="mt-4 rounded">
@@ -96,15 +142,7 @@
           <Button
             class="mt-2 w-full"
             onclick={async () => {
-              const result = await claimReward();
-              if (result.success && result.lastReward && appState.user) {
-                // Update currency
-                /*appState.user.coins = result.coins;
-                appState.user.gold = result.gold;*/
-
-                // For now invalidate all page data. It's fine!
-                await invalidateAll();
-              }
+              await claim();
             }}>Claim Reward</Button
           >
         {/if}

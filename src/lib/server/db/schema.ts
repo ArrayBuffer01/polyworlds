@@ -52,6 +52,12 @@ export const medalsTable = pgTable("medal", {
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
 
+export const forumsTable = pgTable("forum", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }),
+  description: varchar("description", {length: 400})
+})
+
 export const ownedMedalsTable = pgTable(
   "owned_medal",
   {

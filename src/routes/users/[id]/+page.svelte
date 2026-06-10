@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { PROFILE_DEFAULT_TAB, PROFILE_VALID_TABS } from "$lib/constants";
   import type { PageProps } from "./$types";
 
   let { data }: PageProps = $props();
@@ -9,7 +8,8 @@
   const tabs = [
     {
       tabId: "main",
-      name: "Main Profile"
+      name: "Main Profile",
+      default: true
     },
     {
       tabId: "comments",
@@ -17,9 +17,14 @@
     }
   ];
 
+  const defaultTab = tabs[0];
+
   const currentTab = $derived.by(() => {
-    const tab = page.url.searchParams.get("tab") ?? PROFILE_DEFAULT_TAB;
-    return PROFILE_VALID_TABS.includes(tab) ? tab : PROFILE_DEFAULT_TAB;
+    const tab = page.url.searchParams.get("tab")
+      ? (tabs.find((tab) => tab.tabId === page.url.searchParams.get("tab"))?.tabId ??
+        defaultTab.tabId)
+      : defaultTab.tabId;
+    return tab;
   });
 </script>
 
