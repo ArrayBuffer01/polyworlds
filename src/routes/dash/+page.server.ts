@@ -1,5 +1,6 @@
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ cookies, locals }) => {
-  return {};
+  const lastReward = locals.user?.lastReward;
+  return { lastReward };
 }) satisfies PageServerLoad;

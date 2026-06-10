@@ -17,7 +17,8 @@ export const lucia = new Lucia(adapter, {
     username: data.username,
     createdAt: data.createdAt,
     gold: data.gold,
-    coins: data.coins
+    coins: data.coins,
+    lastReward: data.lastReward
   })
 });
 
@@ -37,4 +38,5 @@ interface DatabaseUserAttributes {
   email: string;
   gold: number;
   coins: number;
+  lastReward: Date;
 }

@@ -6,7 +6,10 @@ import * as z from "zod";
 
 export const postFeed = form(
   z.object({
-    content: z.string().min(2).max(280)
+    content: z
+      .string("Post feed content is required")
+      .min(3, "Post feed has to be at least 3 characters long.")
+      .max(120, "Post feed content may not be longer than 120 characters!")
   }),
   async ({ content }) => {
     const { locals } = getRequestEvent();

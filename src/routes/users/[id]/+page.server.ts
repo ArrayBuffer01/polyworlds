@@ -1,10 +1,32 @@
 import { db } from "$lib/server/db";
-import { usersTable } from "$lib/server/db/schema";
-import { eq } from "drizzle-orm";
+import { medalsTable, ownedMedalsTable, usersTable } from "$lib/server/db/schema";
+import { eq, getTableColumns } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
+import { error } from "@sveltejs/kit";
+
+const { passwordHash, email, lastReward, gold, coins, ...restUserColumns } =
+  getTableColumns(usersTable);
 
 export const load = (async ({ params }) => {
-  console.log(params);
-  const user = await db.select().from(usersTable).where(eq(usersTable.id, params.id));
-  return { target: user[0] };
+  const userId = parseInt(params.id) || 1;
+  const rows = await db
+    .select({
+      user: restUserColumns,
+      medal: getTableColumns(medalsTable)
+    })
+    .from(usersTable)
+    .leftJoin(ownedMedalsTable, eq(usersTable.id, ownedMedalsTable.userId))
+    .leftJoin(medalsTable, eq(ownedMedalsTable.medalId, medalsTable.id))
+    .where(eq(usersTable.id, userId));
+
+  if (!rows.length) {
+    error(404, "This user does not exist!");
+  }
+  
+  return {
+    profile: {
+      ...rows[0].user,
+      medals: rows.map((row) => row.medal).filter((medal) => !!medal)
+    }
+  };
 }) satisfies PageServerLoad;

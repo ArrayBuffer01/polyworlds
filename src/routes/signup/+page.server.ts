@@ -1,27 +1,38 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { invalidateAll } from "$app/navigation";
 import { lucia } from "$lib/server/auth";
 import bcrypt from "bcrypt";
 import { db } from "$lib/server/db";
 import { usersTable } from "$lib/server/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 
+const registerSchema = z.object({
+  username: z
+    .string("Username is required.")
+    .min(3, "Username has to be at least 3 characters.")
+    .max(20, "Username can be max 20 characters."),
+  email: z.email().max(64, "Email can be max 64 characters.").optional().nullable(),
+  password: z.string("Password is required.").min(6, "Password has to be at least 6 characters.")
+});
+
 export const actions = {
   signup: async ({ request, cookies }) => {
-    const data = await request.formData();
+    const formData = Object.fromEntries(await request.formData());
 
-    const username = data.get("username")?.toString();
-    const email = data.get("email")?.toString();
-    const password = data.get("password")?.toString();
+    const parsed = z.safeParse(registerSchema, formData);
 
-    if (!username || !email || !password) {
-      return fail(400, { error: "Username, email, and password are required" });
+    if (!parsed.success) {
+      return fail(400, { fieldErrors: z.treeifyError(parsed.error) });
     }
+
+    const username = parsed.data.username;
+    const email = parsed.data.email;
+    const password = parsed.data.password;
 
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.username, username)
@@ -29,14 +40,6 @@ export const actions = {
 
     if (user) {
       return fail(400, { error: "Username already exists" });
-    }
-
-    const emailUser = await db.query.usersTable.findFirst({
-      where: eq(usersTable.email, email)
-    });
-
-    if (emailUser) {
-      return fail(400, { error: "Email already exists" });
     }
 
     const passwordHash = bcrypt.hashSync(password, 10);

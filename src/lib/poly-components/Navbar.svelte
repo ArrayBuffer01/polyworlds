@@ -5,7 +5,7 @@
   let dropdownOpen = $state(false);
 </script>
 
-<nav class="flex h-15 w-screen justify-center bg-plw-red">
+<nav class="fixed flex h-15 w-screen justify-center bg-plw-red">
   <div class="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 text-white">
     <!-- Aligned left -->
     <div class="flex items-center">
