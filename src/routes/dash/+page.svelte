@@ -115,7 +115,6 @@
             class="mt-2 w-full"
             variant="secondary"
             onclick={async () => {
-              await claim();
               open = false;
             }}>Not Now</Button
           >
