@@ -1,7 +1,11 @@
 <script lang="ts">
+  import { getAppContext } from "$lib/appState.svelte";
   import type { PageProps } from "./$types";
+  import ChevronRight from "@lucide/svelte/icons/chevron-right";
 
   let { data }: PageProps = $props();
+
+  const appState = getAppContext();
 </script>
 
 <svelte:head>
@@ -25,8 +29,14 @@
         </div>
       </div>
 
-      <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/login">Login</a>
-      <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/signup">Signup</a>
+      {#if !appState.user}
+        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/login">Login</a>
+        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/signup"
+          >Signup</a
+        >
+      {:else}
+        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/dash">Dashboard <ChevronRight class="inline-block" /></a>
+      {/if}
     </div>
   </div>
 </div>
