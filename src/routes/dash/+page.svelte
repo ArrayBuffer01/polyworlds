@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getAppContext } from "$lib/appState.svelte";
-  import type { PageProps } from "./$types";
+  import type { PageProps, Snapshot } from "./$types";
   import { postFeed, getFeeds } from "./feed.remote";
   import * as Field from "$lib/components/ui/field/index";
   import { Textarea } from "$lib/components/ui/textarea/index";
@@ -19,10 +19,17 @@
 
   // Modal state
   let open = $state(false);
+  
+  export const snapshot: Snapshot<boolean> = {
+    capture: () => open,
+    restore: (value) => {
+      console.log(value);
+      open = value;
+    }
+  };
 
   // Daily Reward states
   let now = $state(Date.now());
-  let rewardPending = $state(false);
   let lastReward = $derived(data.lastReward?.getTime() || 0);
   const msUntilNextReward = $derived(!lastReward ? 0 : Math.max(0, lastReward + ONE_DAY - now));
   const rewardAvailable = $derived<boolean>(!lastReward || msUntilNextReward === 0);
@@ -56,7 +63,9 @@
 
     if (rewardAvailable) {
       clearIntv();
-      open = true;
+      if (sessionStorage.getItem("rewardDismissed") !== "true") {
+        open = true;
+      }
     } else {
       setupIntv();
     }
@@ -99,7 +108,11 @@
       </h1>
     </div>
 
-    <Dialog.Root bind:open>
+    <Dialog.Root bind:open onOpenChange={(val) => {
+      if (!val) {
+        sessionStorage.setItem("rewardDismissed", "true");
+      }
+    }}>
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>Daily Reward</Dialog.Title>
