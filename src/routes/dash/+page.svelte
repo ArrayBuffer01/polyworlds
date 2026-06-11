@@ -22,7 +22,6 @@
 
   // Daily Reward states
   let now = $state(Date.now());
-  let rewardPending = $state(false);
   let lastReward = $derived(data.lastReward?.getTime() || 0);
   const msUntilNextReward = $derived(!lastReward ? 0 : Math.max(0, lastReward + ONE_DAY - now));
   const rewardAvailable = $derived<boolean>(!lastReward || msUntilNextReward === 0);
