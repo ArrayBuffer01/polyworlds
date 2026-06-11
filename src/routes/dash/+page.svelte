@@ -60,12 +60,10 @@
 
   $effect(() => {
     if (!browser) return;
-
+    
     if (rewardAvailable) {
       clearIntv();
-      if (sessionStorage.getItem("rewardDismissed") !== "true") {
-        open = true;
-      }
+      open = true;
     } else {
       setupIntv();
     }
@@ -108,11 +106,7 @@
       </h1>
     </div>
 
-    <Dialog.Root bind:open onOpenChange={(val) => {
-      if (!val) {
-        sessionStorage.setItem("rewardDismissed", "true");
-      }
-    }}>
+    <Dialog.Root bind:open>
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>Daily Reward</Dialog.Title>
@@ -129,8 +123,8 @@
             class="mt-2 w-full"
             variant="secondary"
             onclick={async () => {
-              await claim();
               open = false;
+              
             }}>Not Now</Button
           >
           </Dialog.Description>
