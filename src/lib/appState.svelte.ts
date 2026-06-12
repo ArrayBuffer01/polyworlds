@@ -5,7 +5,7 @@ import type { User } from "../types/User";
 export class AppState {
   user = $state<User | null | undefined>(null);
   landingPageActive = $derived<boolean>(this.user == null && page.url.pathname === "/");
-
+  
   constructor(user?: User) {
     if (user) {
       this.user = user;
