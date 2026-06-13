@@ -1,5 +1,11 @@
 export interface User {
+  id: number;
   username: string;
-  gold: number;
-  coins: number;
+  createdAt: Date;
+  bio: string | null;
+}
+
+export interface Feed {
+  content: string;
+  createdAt: Date;
 }
