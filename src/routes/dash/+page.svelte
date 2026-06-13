@@ -7,7 +7,6 @@
   import { Button } from "$lib/components/ui/button";
   import { Spinner } from "$lib/components/ui/spinner";
   import * as Card from "$lib/components/ui/card";
-  import { ONE_DAY } from "$lib/constants";
   import { claimReward } from "./dash.remote";
   import { browser } from "$app/env";
   import { invalidateAll } from "$app/navigation";
@@ -15,6 +14,7 @@
   import { Separator } from "$lib/components/ui/separator";
   import * as Dialog from "$lib/components/ui/dialog";
   import UserFeed from "$lib/poly-components/UserFeed.svelte";
+  import { DailyRewardState, setRewardContext } from "$lib/dailyReward.svelte";
 
   let { data }: PageProps = $props();
 
@@ -22,28 +22,14 @@
   let open = $state(false);
 
   // Daily Reward states
-  let now = $state(Date.now());
-  let lastReward = $derived(data.lastReward?.getTime() || 0);
-  const msUntilNextReward = $derived(!lastReward ? 0 : Math.max(0, lastReward + ONE_DAY - now));
-  const rewardAvailable = $derived<boolean>(!lastReward || msUntilNextReward === 0);
-  const countdown = $derived.by(() => {
-    if (rewardAvailable) return null;
-
-    const totalSeconds = Math.ceil(msUntilNextReward / 1000);
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours} h ${minutes} min ${seconds} s`;
-  });
+  const rewardState = setRewardContext(new DailyRewardState());
 
   let submitting = $state(false);
   let intv: NodeJS.Timeout;
 
   function setupIntv() {
     intv = setInterval(() => {
-      now = Date.now();
+      rewardState.tick();
     }, 1000);
   }
 
@@ -53,8 +39,8 @@
 
   $effect(() => {
     if (!browser) return;
-
-    if (rewardAvailable) {
+    
+    if (rewardState.rewardAvailable) {
       clearIntv();
       open = true;
     } else {
@@ -131,19 +117,17 @@
         <Card.Title class="border-b text-center">Daily Reward</Card.Title>
       </Card.Header>
       <Card.Content>
-        {#if rewardAvailable}
+        {#if rewardState.rewardAvailable}
           Reward available. Claim it using the button below.
-        {:else if countdown}
-          Next Reward available in:
-          {countdown}
-        {/if}
-        {#if rewardAvailable}
           <Button
             class="mt-2 w-full"
             onclick={async () => {
               await claim();
             }}>Claim Reward</Button
           >
+        {:else if rewardState.countdown}
+          Next Reward available in:
+          {rewardState.countdown}
         {/if}
       </Card.Content>
     </Card.Root>
