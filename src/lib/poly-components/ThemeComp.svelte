@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { themeState } from "$lib/theme.svelte";
-  import { onMount } from "svelte";
+  import { getAppContext } from "$lib/appState.svelte";
+  import { untrack } from "svelte";
 
-  onMount(async () => {
-    themeState.theme = (await cookieStore.get("theme"))?.value ?? "dark";
-  });
+  const { initialTheme }: { initialTheme: string } = $props();
+
+  const appState = getAppContext();
+
+  appState.theme = untrack(() => initialTheme);
 </script>

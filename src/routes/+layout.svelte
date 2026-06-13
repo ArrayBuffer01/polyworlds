@@ -16,7 +16,7 @@
   });
 </script>
 
-<ThemeComp />
+<ThemeComp initialTheme={data.theme} />
 
 <svelte:head>
   <script>
@@ -24,7 +24,7 @@
       const themeCookie = document.cookie.match(/theme=(light|dark)/)?.[1];
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-      if ((!themeCookie && prefersDark) || themeCookie === "dark") {
+      if (themeCookie === "dark") {
         document.documentElement.classList.add("dark");
       }
     })();

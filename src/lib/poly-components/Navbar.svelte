@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getAppContext } from "$lib/appState.svelte";
-
+  import { Button } from "$lib/components/ui/button";
+  
   const appState = getAppContext();
   let dropdownOpen = $state(false);
 </script>
@@ -47,6 +48,8 @@
     <!-- Aligned right -->
     {#if appState.user}
       <div class="flex items-center">
+        <Button onclick={() => appState.theme = appState.theme === "dark" ? "light" : "dark"
+        }>Switch theme to {appState.theme === "dark" ? "light" : "dark"}</Button>
         <p class="font-semibold text-plw-white">
           <i class="fa fa-fire text-amber-500"></i>
           <span class="ml-2 text-amber-500 select-none">{appState.user.gold}</span>

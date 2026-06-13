@@ -10,7 +10,7 @@
 
 <div class="overflow-hidden rounded border hover:border-plw-red">
   <div class="px-5 pt-4">
-    <div>
+    <div class="w-fit">
       <a href="/users/{user.id}">
         <div class="flex gap-2">
           <img
