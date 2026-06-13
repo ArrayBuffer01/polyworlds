@@ -1,6 +1,5 @@
 <script lang="ts">
   import { getAppContext } from "$lib/appState.svelte";
-  import type { PageProps } from "./$types";
   import { postFeed, getFeeds } from "./feed.remote";
   import * as Field from "$lib/components/ui/field/index";
   import { Textarea } from "$lib/components/ui/textarea/index";
@@ -14,9 +13,11 @@
   import { Separator } from "$lib/components/ui/separator";
   import * as Dialog from "$lib/components/ui/dialog";
   import UserFeed from "$lib/poly-components/UserFeed.svelte";
+  import UserLock from "@lucide/svelte/icons/user-lock";
+  import House from "@lucide/svelte/icons/house";
   import { DailyRewardState, setRewardContext } from "$lib/dailyReward.svelte";
+  import { page } from "$app/state";
 
-  let { data }: PageProps = $props();
 
   // Modal state
   let open = $state(false);
@@ -75,8 +76,35 @@
   <title>Dashboard | Polyworlds</title>
 </svelte:head>
 
+{#if !appState.isLoggedIn}
+  <div class="p-20 flex flex-col items-center justify-center w-full gap-4">
+    {const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true")}
+     {#if loggedOutMessage}
+      <h1 class="flex text-2xl border p-2 text-center w-fit items-center justify-center bg-green-500 rounded text-white">You have been logged out!</h1>
+    {/if}
+  <div class="flex justify-center w-full">
+  
+    <div class="hover:border-plw-red border p-5 rounded w-full max-w-md">
+      <h1 class="text-2xl mb-2">
+        <UserLock class="inline-block" />
+        Login or sign up to access the dashboard
+      </h1>
+      <div class="flex flex-col w-full gap-2">
+        <a href="/login" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white">Login</a>
+        <a href="/signup" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white">Sign up</a>
+        <Separator class="mt-4" />
+        <a href="/" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white"><House class="inline-block" /> Landing</a>
+      </div>
+    </div>
+  </div>
+  </div>
+{/if}
+
+
+{#if appState.isLoggedIn}
 <div class="mx-auto flex flex-col gap-6 p-20 lg:flex-row">
-  <aside class="flex-1">
+  
+    <aside class="flex-1">
     <!-- Left side -->
     <div class="flex items-center gap-2">
       <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-full" />
@@ -209,3 +237,5 @@
     </h1>
   </aside>
 </div>
+
+{/if}

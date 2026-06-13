@@ -26,6 +26,10 @@ export class AppState {
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }
   }
+
+  get isLoggedIn() {
+    return this.user != null && this.user != undefined;
+  }
 }
 
 export const [getAppContext, setAppContext] = createContext<AppState>();

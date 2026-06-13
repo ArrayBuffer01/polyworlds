@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getAppContext } from "$lib/appState.svelte";
   import { Button } from "$lib/components/ui/button";
-  
+
   const appState = getAppContext();
   let dropdownOpen = $state(false);
 </script>
@@ -48,8 +48,9 @@
     <!-- Aligned right -->
     {#if appState.user}
       <div class="flex items-center">
-        <Button onclick={() => appState.theme = appState.theme === "dark" ? "light" : "dark"
-        }>Switch theme to {appState.theme === "dark" ? "light" : "dark"}</Button>
+        <Button onclick={() => (appState.theme = appState.theme === "dark" ? "light" : "dark")}
+          >Switch theme to {appState.theme === "dark" ? "light" : "dark"}</Button
+        >
         <p class="font-semibold text-plw-white">
           <i class="fa fa-fire text-amber-500"></i>
           <span class="ml-2 text-amber-500 select-none">{appState.user.gold}</span>
@@ -97,7 +98,7 @@
               <li
                 class="mb-1 cursor-pointer px-4 py-2 font-semibold text-plw-red transition duration-100 select-none hover:bg-rose-50"
               >
-                <a href="/logout">Logout</a>
+                <a href="/logout?return_to={encodeURIComponent("/dash?logged_out=true")}">Logout</a>
               </li>
             </ul>
           </div>
