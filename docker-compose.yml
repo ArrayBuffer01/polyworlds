@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://polyworlds:${DB_PASSWORD}@db:5432/polyworlds_db
+      ORIGIN: https://localhost
+    depends_on:
+      - db
+    networks: [internal]
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: polyworlds
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: polyworlds_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks: [internal, shared]
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+    networks: [internal, shared]
+volumes:
+  db_data:
+  caddy_data:
+
+networks:
+  internal:
+  shared:
+    external: true
+    name: polyworlds_shared

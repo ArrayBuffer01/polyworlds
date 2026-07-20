@@ -17,6 +17,7 @@
   import House from "@lucide/svelte/icons/house";
   import { DailyRewardState, setRewardContext } from "$lib/dailyReward.svelte";
   import { page } from "$app/state";
+  import CooldownZone from "$lib/poly-components/CooldownZone.svelte";
 
 
   // Modal state
@@ -107,7 +108,7 @@
     <aside class="flex-1">
     <!-- Left side -->
     <div class="flex items-center gap-2">
-      <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-full" />
+      <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-2xl" />
       <h1 class="scroll-m-20 text-3xl font-light tracking-tight transition-colors first:mt-0">
         Welcome, {appState.user?.username}
       </h1>
@@ -168,7 +169,10 @@
     >
       User Feed
     </h1>
-    <form
+    
+    <CooldownZone duration={15000} initialTime={null}>
+      {#snippet children(cooldown)}
+        <form
       class="mb-3"
       {...postFeed.enhance(async ({ submit, element }) => {
         submitting = true;
@@ -194,7 +198,7 @@
                 {...postFeed.fields.content.as("text")}
                 id="feedText"
                 class="rounded"
-                disabled={submitting}
+                disabled={submitting || cooldown.isActive}
                 placeholder="What's on your mind?"
                 rows={4}
               />
@@ -209,11 +213,15 @@
 
           <Field.Group>
             <Field.Field>
-              <Button variant="default" disabled={submitting} type="submit">
+              <Button variant="default" disabled={submitting || cooldown.isActive} type="submit">
                 {#if submitting}
                   <Spinner /> Posting...
                 {:else}
-                  Post
+                  {#if !cooldown.isActive}
+                    Post
+                    {:else}
+                    Post ({cooldown.countdown})
+                  {/if}
                 {/if}
               </Button>
             </Field.Field>
@@ -221,6 +229,8 @@
         </Field.Set>
       </div>
     </form>
+      {/snippet}
+    </CooldownZone>
 
     <div class="space-y-4">
       {#each await getFeeds() as { user, feed } (feed.id)}
