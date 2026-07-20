@@ -7,15 +7,19 @@
   import { Button } from "$lib/components/ui/button";
   import { Spinner } from "$lib/components/ui/spinner";
   import * as Card from "$lib/components/ui/card";
-  import { ONE_DAY } from "$lib/constants";
   import { claimReward } from "./dash.remote";
   import { browser } from "$app/env";
   import { invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
   import { Separator } from "$lib/components/ui/separator";
   import * as Dialog from "$lib/components/ui/dialog";
+  import UserFeed from "$lib/poly-components/UserFeed.svelte";
+  import UserLock from "@lucide/svelte/icons/user-lock";
+  import House from "@lucide/svelte/icons/house";
+  import { DailyRewardState, setRewardContext } from "$lib/dailyReward.svelte";
+  import { page } from "$app/state";
+  import CooldownZone from "$lib/poly-components/CooldownZone.svelte";
 
-  let { data }: PageProps = $props();
 
   // Modal state
   let open = $state(false);
@@ -50,7 +54,7 @@
 
   function setupIntv() {
     intv = setInterval(() => {
-      now = Date.now();
+      rewardState.tick();
     }, 1000);
   }
 
@@ -96,11 +100,38 @@
   <title>Dashboard | Polyworlds</title>
 </svelte:head>
 
+{#if !appState.isLoggedIn}
+  <div class="p-20 flex flex-col items-center justify-center w-full gap-4">
+    {const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true")}
+     {#if loggedOutMessage}
+      <h1 class="flex text-2xl border p-2 text-center w-fit items-center justify-center bg-green-500 rounded text-white">You have been logged out!</h1>
+    {/if}
+  <div class="flex justify-center w-full">
+  
+    <div class="hover:border-plw-red border p-5 rounded w-full max-w-md">
+      <h1 class="text-2xl mb-2">
+        <UserLock class="inline-block" />
+        Login or sign up to access the dashboard
+      </h1>
+      <div class="flex flex-col w-full gap-2">
+        <a href="/login" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white">Login</a>
+        <a href="/signup" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white">Sign up</a>
+        <Separator class="mt-4" />
+        <a href="/" class="w-full rounded-md bg-plw-red p-1.5 text-center text-white"><House class="inline-block" /> Landing</a>
+      </div>
+    </div>
+  </div>
+  </div>
+{/if}
+
+
+{#if appState.isLoggedIn}
 <div class="mx-auto flex flex-col gap-6 p-20 lg:flex-row">
-  <aside class="flex-1">
+  
+    <aside class="flex-1">
     <!-- Left side -->
     <div class="flex items-center gap-2">
-      <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-full" />
+      <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-2xl" />
       <h1 class="scroll-m-20 text-3xl font-light tracking-tight transition-colors first:mt-0">
         Welcome, {appState.user?.username}
       </h1>
@@ -139,19 +170,17 @@
         <Card.Title class="border-b text-center">Daily Reward</Card.Title>
       </Card.Header>
       <Card.Content>
-        {#if rewardAvailable}
+        {#if rewardState.rewardAvailable}
           Reward available. Claim it using the button below.
-        {:else if countdown}
-          Next Reward available in:
-          {countdown}
-        {/if}
-        {#if rewardAvailable}
           <Button
             class="mt-2 w-full"
             onclick={async () => {
               await claim();
             }}>Claim Reward</Button
           >
+        {:else if rewardState.countdown}
+          Next Reward available in:
+          {rewardState.countdown}
         {/if}
       </Card.Content>
     </Card.Root>
@@ -164,7 +193,10 @@
     >
       User Feed
     </h1>
-    <form
+    
+    <CooldownZone duration={15000} initialTime={null}>
+      {#snippet children(cooldown)}
+        <form
       class="mb-3"
       {...postFeed.enhance(async ({ submit, element }) => {
         submitting = true;
@@ -190,7 +222,7 @@
                 {...postFeed.fields.content.as("text")}
                 id="feedText"
                 class="rounded"
-                disabled={submitting}
+                disabled={submitting || cooldown.isActive}
                 placeholder="What's on your mind?"
                 rows={4}
               />
@@ -205,11 +237,15 @@
 
           <Field.Group>
             <Field.Field>
-              <Button variant="default" disabled={submitting} type="submit">
+              <Button variant="default" disabled={submitting || cooldown.isActive} type="submit">
                 {#if submitting}
                   <Spinner /> Posting...
                 {:else}
-                  Post
+                  {#if !cooldown.isActive}
+                    Post
+                    {:else}
+                    Post ({cooldown.countdown})
+                  {/if}
                 {/if}
               </Button>
             </Field.Field>
@@ -217,33 +253,12 @@
         </Field.Set>
       </div>
     </form>
+      {/snippet}
+    </CooldownZone>
 
     <div class="space-y-4">
       {#each await getFeeds() as { user, feed } (feed.id)}
-        <div class="overflow-hidden rounded border hover:border-plw-red">
-          <div class="px-5 pt-4">
-            <div>
-              <a href="/users/{user.id}">
-                <div class="flex gap-2">
-                  <img
-                    alt="Profile"
-                    src="/profile.png"
-                    class="h-10 w-10 rounded-full border border-plw-gray"
-                  />
-                  <div class="font-semibold">
-                    <span class="hover:underline">{user.username}</span>
-                  </div>
-                  <div>
-                    <span class="text-sm">{feed.createdAt.toLocaleTimeString()}</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="pt-2 pb-2">
-              {feed.content}
-            </div>
-          </div>
-        </div>
+        <UserFeed user={user} feed={feed} />
       {/each}
     </div>
   </main>
@@ -256,3 +271,5 @@
     </h1>
   </aside>
 </div>
+
+{/if}

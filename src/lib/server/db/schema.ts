@@ -6,7 +6,8 @@ import {
   text,
   varchar,
   timestamp,
-  primaryKey
+  primaryKey,
+  boolean
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("user", {
@@ -25,7 +26,9 @@ export const userRelations = relations(usersTable, ({ many }) => ({
   sessions: many(sessionTable),
   feeds: many(userFeedTable),
   createdMedals: many(medalsTable),
-  ownedMedals: many(ownedMedalsTable)
+  ownedMedals: many(ownedMedalsTable),
+  posts: many(forumPostsTable),
+  replies: many(forumPostRepliesTable)
 }));
 
 export const sessionTable = pgTable("sessions", {
@@ -55,8 +58,25 @@ export const medalsTable = pgTable("medal", {
 export const forumsTable = pgTable("forum", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }),
-  description: varchar("description", {length: 400})
-})
+  description: varchar("description", { length: 400 }),
+  locked: boolean("locked").default(false)
+});
+
+export const forumPostsTable = pgTable("forum_posts", {
+  id: serial("id").primaryKey(),
+  forumId: integer("forum_id").notNull(),
+  userId: integer("user_id").notNull(),
+  content: varchar("content", { length: 4000 }).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow()
+});
+
+export const forumPostRepliesTable = pgTable("forum_post_replies", {
+  id: serial("id").primaryKey(),
+  postId: integer("post_id").notNull(),
+  userId: integer("user_id").notNull(),
+  content: varchar("content", { length: 4000 }).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow()
+});
 
 export const ownedMedalsTable = pgTable(
   "owned_medal",
@@ -70,6 +90,31 @@ export const ownedMedalsTable = pgTable(
 export const userFeedRelations = relations(userFeedTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [userFeedTable.userId],
+    references: [usersTable.id]
+  })
+}));
+
+export const forumPostRelations = relations(forumPostsTable, ({ many, one }) => ({
+  forum: one(forumsTable, {
+    fields: [forumPostsTable.forumId],
+    references: [forumsTable.id]
+  }),
+
+  user: one(usersTable, {
+    fields: [forumPostsTable.userId],
+    references: [usersTable.id]
+  }),
+
+  replies: many(forumPostRepliesTable)
+}));
+
+export const forumPostRepliesRelations = relations(forumPostRepliesTable, ({one}) => ({
+  post: one(forumPostsTable, {
+    fields: [forumPostRepliesTable.postId],
+    references: [forumPostsTable.id]
+  }),
+  user: one(usersTable, {
+    fields: [forumPostRepliesTable.userId],
     references: [usersTable.id]
   })
 }));

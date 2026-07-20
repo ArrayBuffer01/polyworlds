@@ -1,6 +1,11 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import { Separator } from "$lib/components/ui/separator";
   import type { PageProps } from "./$types";
+  import * as Empty from "$lib/components/ui/empty/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import ArrowUpRightIcon from "@lucide/svelte/icons/arrow-up-right";
+  import Medal from "@lucide/svelte/icons/medal";
 
   let { data }: PageProps = $props();
   const profile = $derived(data.profile);
@@ -30,19 +35,24 @@
 
 <main class="container w-full p-20">
   <div class="mt-6 grid grid-cols-1 gap-2 lg:grid-cols-2">
-    <div>
+    <div class="flex flex-col gap-4">
       <div class="rounded border p-4 hover:border-plw-red">
-        <div>
-          {profile.username}
-        </div>
-        <div class="mt-2">
-          <img src="/profile.png" alt="Profile" />
+        <div class="mt-2 flex items-center gap-4">
+          <img src="/profile.png" alt="Profile" class="shrink-0 rounded-2xl" />
+          <h2 class="ml-4 text-2xl font-light">{profile.username}</h2>
         </div>
 
         <h3 class="mt-4 font-extrabold">About {profile.username}</h3>
         <div class="mt-2">
-          {profile.bio ? profile.bio : ""}
+          {profile.bio ? profile.bio : "No bio yet."}
         </div>
+      </div>
+      <div class="rounded border pr-4 pb-4 pl-4 hover:border-plw-red">
+        <h3 class="mt-4 font-extrabold">{profile.username}'s Stats</h3>
+        <Separator class="mt-1 mb-2" />
+        <p>Join Date: {profile.createdAt.toLocaleDateString()}</p>
+        <p>Profile Views: 0</p>
+        <p>Forum Posts: 0</p>
       </div>
     </div>
 
@@ -59,7 +69,7 @@
 
       <div class="flex-1 p-2">
         {#if currentTab === "main"}
-          <div class="rounded border p-4">
+          <div class="rounded border p-4 hover:border-plw-red">
             <div>
               <span class="font-semibold">Medals</span>
             </div>
@@ -70,7 +80,17 @@
                   <img src={medal.imageURL} class="h-16 w-16" alt={medal.name} />
                 {/each}
               {:else}
-                <p>{profile.username} does not have medals.</p>
+                <Empty.Root>
+                  <Empty.Header>
+                    <Empty.Media variant="icon">
+                      <Medal />
+                    </Empty.Media>
+                    <Empty.Title>No Medals to show</Empty.Title>
+                    <Empty.Description>
+                      {profile.username} does not have any medals.
+                    </Empty.Description>
+                  </Empty.Header>
+                </Empty.Root>
               {/if}
             </div>
           </div>

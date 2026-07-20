@@ -1,0 +1,7 @@
+https://polyworlds.net {
+  reverse_proxy app:3000
+}
+
+https://forum.polyworlds.net {
+  reverse_proxy forum-app:3000
+}
