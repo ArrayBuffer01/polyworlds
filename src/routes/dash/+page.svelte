@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getAppContext } from "$lib/appState.svelte";
+  import type { PageProps, Snapshot } from "./$types";
   import { postFeed, getFeeds } from "./feed.remote";
   import * as Field from "$lib/components/ui/field/index";
   import { Textarea } from "$lib/components/ui/textarea/index";
@@ -22,9 +23,31 @@
 
   // Modal state
   let open = $state(false);
+  
+  export const snapshot: Snapshot<boolean> = {
+    capture: () => open,
+    restore: (value) => {
+      console.log(value);
+      open = value;
+    }
+  };
 
   // Daily Reward states
-  const rewardState = setRewardContext(new DailyRewardState());
+  let now = $state(Date.now());
+  let lastReward = $derived(data.lastReward?.getTime() || 0);
+  const msUntilNextReward = $derived(!lastReward ? 0 : Math.max(0, lastReward + ONE_DAY - now));
+  const rewardAvailable = $derived<boolean>(!lastReward || msUntilNextReward === 0);
+  const countdown = $derived.by(() => {
+    if (rewardAvailable) return null;
+
+    const totalSeconds = Math.ceil(msUntilNextReward / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours} h ${minutes} min ${seconds} s`;
+  });
 
   let submitting = $state(false);
   let intv: NodeJS.Timeout;
@@ -42,7 +65,7 @@
   $effect(() => {
     if (!browser) return;
     
-    if (rewardState.rewardAvailable) {
+    if (rewardAvailable) {
       clearIntv();
       open = true;
     } else {
@@ -132,6 +155,7 @@
             variant="secondary"
             onclick={async () => {
               open = false;
+              
             }}>Not Now</Button
           >
           </Dialog.Description>
