@@ -6,8 +6,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   const sessionId = event.cookies.get(lucia.sessionCookieName);
 
   if (!sessionId) {
-    event.locals.user = null;
-    event.locals.session = null;
+    console.log("User not set.")
   } else {
     const { session, user } = await lucia.validateSession(sessionId);
 
@@ -29,8 +28,8 @@ export const handle: Handle = async ({ event, resolve }) => {
       });
     }
 
-    event.locals.user = user;
-    event.locals.session = session;
+    event.locals.user = user ?? undefined;
+    event.locals.session = session ?? undefined;
   }
 
   const response = await resolve(event);
