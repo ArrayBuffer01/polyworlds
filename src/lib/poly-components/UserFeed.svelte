@@ -11,7 +11,7 @@
 <div class="overflow-hidden rounded border hover:border-plw-red">
   <div class="px-5 pt-4">
     <div class="w-fit">
-      <a href="/users/{user.id}">
+      <a href="/u/{user.id}">
         <div class="flex gap-2">
           <img
             alt="Profile"

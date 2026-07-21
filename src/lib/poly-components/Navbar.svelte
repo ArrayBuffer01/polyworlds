@@ -87,7 +87,7 @@
               <li
                 class="mt-1 w-full cursor-pointer px-4 py-2 font-semibold text-plw-black transition duration-100 select-none hover:bg-zinc-100"
               >
-                <a class="w-full" href="/users/{appState.user.id}">Profile</a>
+                <a class="w-full" href="/u/{appState.user.id}">Profile</a>
               </li>
               <li
                 class="cursor-pointer px-4 py-2 font-semibold text-plw-black transition duration-100 select-none hover:bg-zinc-100"
@@ -98,7 +98,7 @@
               <li
                 class="mb-1 cursor-pointer px-4 py-2 font-semibold text-plw-red transition duration-100 select-none hover:bg-rose-50"
               >
-                <a href="/logout?return_to={encodeURIComponent('/dash?logged_out=true')}">Logout</a>
+                <a href="/logout?return_to={encodeURIComponent("/dash?logged_out=true")}">Logout</a>
               </li>
             </ul>
           </div>
