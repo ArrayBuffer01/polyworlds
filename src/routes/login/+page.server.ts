@@ -1,11 +1,10 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { invalidateAll } from "$app/navigation";
 import { lucia } from "$lib/server/auth";
 import bcrypt from "bcrypt";
 import { db } from "$lib/server/db";
 import { usersTable } from "$lib/server/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getMainDomain } from "$lib/domainUtils";
 
 export const load = (async () => {
