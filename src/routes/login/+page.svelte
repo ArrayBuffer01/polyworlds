@@ -74,7 +74,7 @@
 <div class="bg-plw-red flex items-center justify-center">
   <p class="text-white text-8xl tracking-tighter font-super-bouncer select-none">POLYWORLDS!</p>
 </div>
-<div class="flex items-center justify-center bg-white">
+<div class="flex items-center justify-center bg-accent">
   <Card.Root class="-my-4 w-full max-w-sm">
     <Card.Header>
       <Card.Title>Login</Card.Title>
