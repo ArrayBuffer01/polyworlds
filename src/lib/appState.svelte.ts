@@ -26,7 +26,8 @@ export class AppState {
       cookieStore.set({
         name: "theme",
         value: newTheme,
-        domain: getMainDomain(page.url.hostname)
+        domain: getMainDomain(page.url.hostname),
+        path: "."
       })
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }
