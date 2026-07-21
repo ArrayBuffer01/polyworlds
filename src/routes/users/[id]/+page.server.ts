@@ -8,7 +8,12 @@ const { passwordHash, email, lastReward, gold, coins, ...restUserColumns } =
   getTableColumns(usersTable);
 
 export const load = (async ({ params }) => {
-  const userId = parseInt(params.id) || 1;
+  const userId = parseInt(params.id);
+
+  if (isNaN(userId)) {
+    error(400, "Invalid user ID");
+  }
+
   const rows = await db
     .select({
       user: restUserColumns,

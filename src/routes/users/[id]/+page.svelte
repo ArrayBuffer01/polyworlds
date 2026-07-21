@@ -2,9 +2,7 @@
   import { page } from "$app/state";
   import { Separator } from "$lib/components/ui/separator";
   import type { PageProps } from "./$types";
-  import * as Empty from "$lib/components/ui/empty/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import ArrowUpRightIcon from "@lucide/svelte/icons/arrow-up-right";
+  import * as Empty from "$lib/components/ui/empty/index";
   import Medal from "@lucide/svelte/icons/medal";
 
   let { data }: PageProps = $props();
