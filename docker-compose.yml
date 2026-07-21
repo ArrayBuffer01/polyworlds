@@ -3,7 +3,9 @@ services:
     build: .
     environment:
       DATABASE_URL: postgres://polyworlds:${DB_PASSWORD}@db:5432/polyworlds_db
-      ORIGIN: https://polyworlds.net
+      HOST_HEADER: x-forwarded-host
+      PROTOCOL_HEADER: x-forwarded-proto
+      PORT: 3000
     depends_on:
       - db
     networks: [internal]
