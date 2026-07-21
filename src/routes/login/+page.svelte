@@ -5,7 +5,6 @@
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Spinner } from "$lib/components/ui/spinner";
-  let { form } = $props();
 
   let loading = $state(false);
 </script>
