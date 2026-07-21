@@ -44,7 +44,7 @@
 
 <div class="grid h-screen grid-cols-2">
 <div class="bg-plw-red flex items-center justify-center">
-  <p class="text-white text-6xl font-black font-climate-crisis">POLYWORLDS</p>
+  <p class="text-white text-6xl font-black font-super-bouncer">POLYWORLDS</p>
 </div>
 <div class="flex items-center justify-center bg-white">
   <Card.Root class="-my-4 w-full max-w-sm">
