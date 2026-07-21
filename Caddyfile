@@ -1,4 +1,4 @@
-https://polyworlds.net {
+https://polyworlds.net, https://www.polyworlds.net {
   reverse_proxy app:3000
 }
 
