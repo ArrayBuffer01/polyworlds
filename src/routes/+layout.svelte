@@ -40,7 +40,7 @@
   />
 </svelte:head>
 
-{#if page.url.pathname != "/login" && page.url.pathname != "/signup"}
+{#if page.url.pathname != "/login" && page.url.pathname != "/signup" && page.url.pathname != "/"}
   {#if appState.landingPageActive}
     <LandingNav />
   {:else}

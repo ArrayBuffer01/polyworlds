@@ -3,6 +3,13 @@
   import type { PageProps } from "./$types";
   import ChevronRight from "@lucide/svelte/icons/chevron-right";
 
+  import { enhance } from "$app/forms";
+  import { Button } from "$lib/components/ui/button";
+  import * as Card from "$lib/components/ui/card/index.js";
+  import { Input } from "$lib/components/ui/input";
+  import { Label } from "$lib/components/ui/label";
+  import { Spinner } from "$lib/components/ui/spinner";
+
   let { data }: PageProps = $props();
 
   const appState = getAppContext();
@@ -13,30 +20,25 @@
 </svelte:head>
 
 <div
-  class="flex h-screen items-center justify-center bg-black/40 bg-[url(https://cdn.xsolla.net/80.lv/uploads/2016/12/environment_8.jpg)] bg-cover"
+  class="flex h-screen items-center justify-center
+         bg-[radial-gradient(circle,rgba(0,0,0,0.1)_1px,transparent_1px)]
+         [background-size:20px_20px]"
 >
-  <div>
-    <div
-      class="flex w-sm flex-col space-y-3 rounded-md border border-plw-red bg-plw-black/45 p-5 pl-6"
-    >
-      <img alt="Logo" src="/polyworlds-logo-text.png" class="select-none" />
-      <div class="flex w-full">
-        <div class="w-full grow rounded-md bg-plw-red p-1.5 text-center text-white">
-          <p class="font-bold text-plw-white">Where will your imagination take you?</p>
-          <p class="text-[15px] text-plw-gray">
-            Join over 69 users that are creating, playing, selling, trading, and much, much more.
-          </p>
-        </div>
-      </div>
-
+  <Card.Root class="-my-4 w-full max-w-sm">
+    <Card.Header>
+      <Card.Title class="flex items-center justify-center font-super-bouncer text-plw-red text-4xl">POLYWORLDS!</Card.Title>
+      <Card.Description class="font-semibold">We're back!</Card.Description>
+      <Card.Description>Polyworlds is releasing in a public beta. Create your own avatar, chat with people from around the world, make new friends, and be part of a growing community.</Card.Description>
+      <Card.Description>We're just getting started, and we'd love to have you join us as Polyworlds continues to grow.</Card.Description>
+    </Card.Header>
+    <Card.Content class="flex">
       {#if !appState.user}
-        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/login">Login</a>
-        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/signup"
-          >Signup</a
-        >
+        <a class="w-full rounded-md bg-plw-red py-2 px-6 text-center font-medium text-white mr-2" href="/login">Login</a>
+        <a class="w-full rounded-md bg-plw-red py-2 px-6 text-center font-medium text-white" href="/signup"
+          >Signup</a>
       {:else}
-        <a class="w-full rounded-md bg-plw-red p-1.5 text-center text-white" href="/dash">Dashboard <ChevronRight class="inline-block" /></a>
+        <a class="w-full rounded-md bg-plw-red py-2 px-6 text-center font-medium text-white" href="/dash">Dashboard <ChevronRight class="inline-block" /></a>
       {/if}
-    </div>
-  </div>
+    </Card.Content>
+  </Card.Root>
 </div>
