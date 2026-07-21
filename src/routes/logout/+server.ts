@@ -1,6 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { lucia } from "$lib/server/auth";
+import { getMainDomain } from "$lib/domainUtils";
 
 export const GET: RequestHandler = async ({ locals, cookies, url }) => {
   if (!locals.session) {
@@ -13,7 +14,8 @@ export const GET: RequestHandler = async ({ locals, cookies, url }) => {
 
     cookies.set(sessionCookie.name, sessionCookie.value, {
       path: ".",
-      ...sessionCookie.attributes
+      ...sessionCookie.attributes,
+      domain: getMainDomain(url.hostname)
     });
   }
 

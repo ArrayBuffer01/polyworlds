@@ -1,3 +1,4 @@
+import { getMainDomain } from "$lib/domainUtils";
 import { lucia } from "$lib/server/auth";
 import type { Handle } from "@sveltejs/kit";
 
@@ -14,7 +15,8 @@ export const handle: Handle = async ({ event, resolve }) => {
       const sessionCookie = lucia.createSessionCookie(session.id);
       event.cookies.set(sessionCookie.name, sessionCookie.value, {
         path: ".",
-        ...sessionCookie.attributes
+        ...sessionCookie.attributes,
+        domain: getMainDomain(event.url.hostname)
       });
     }
 
@@ -22,7 +24,8 @@ export const handle: Handle = async ({ event, resolve }) => {
       const sessionCookie = lucia.createBlankSessionCookie();
       event.cookies.set(sessionCookie.name, sessionCookie.value, {
         path: ".",
-        ...sessionCookie.attributes
+        ...sessionCookie.attributes,
+        domain: getMainDomain(event.url.hostname)
       });
     }
 

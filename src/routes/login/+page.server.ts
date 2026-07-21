@@ -6,13 +6,14 @@ import bcrypt from "bcrypt";
 import { db } from "$lib/server/db";
 import { usersTable } from "$lib/server/db/schema";
 import { eq, sql } from "drizzle-orm";
+import { getMainDomain } from "$lib/domainUtils";
 
 export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 
 export const actions = {
-  login: async ({ request, cookies }) => {
+  login: async ({ request, cookies, url }) => {
     const data = await request.formData();
 
     const username = data.get("username")?.toString();
@@ -33,7 +34,8 @@ export const actions = {
         const sessionCookie = lucia.createSessionCookie(session.id);
         cookies.set(sessionCookie.name, sessionCookie.value, {
           path: ".",
-          ...sessionCookie.attributes
+          ...sessionCookie.attributes,
+          domain: getMainDomain(url.hostname)
         });
 
         return redirect(302, "/dash");

@@ -2,6 +2,7 @@ import { page } from "$app/state";
 import { createContext } from "svelte";
 import type { User } from "../types/User";
 import { browser } from "$app/env";
+import { getMainDomain } from "./domainUtils";
 
 export class AppState {
   user = $state<User | null | undefined>(null);
@@ -22,7 +23,11 @@ export class AppState {
     this.#currentTheme = newTheme;
 
     if (browser) {
-      cookieStore.set("theme", newTheme);
+      cookieStore.set({
+        name: "theme",
+        value: newTheme,
+        domain: getMainDomain(page.url.hostname)
+      })
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }
   }
