@@ -27,7 +27,7 @@
   <Card.Root class="-my-4 w-full max-w-sm">
     <Card.Header>
       <Card.Title class="flex items-center justify-center font-super-bouncer text-plw-red text-4xl">POLYWORLDS!</Card.Title>
-      <Card.Description class="font-semibold">We're back!</Card.Description>
+      <Card.Description class="font-semibold text-plw-text">We're back!</Card.Description>
       <Card.Description>Polyworlds is releasing in a public beta. Create your own avatar, chat with people from around the world, make new friends, and be part of a growing community.</Card.Description>
       <Card.Description>We're just getting started, and we'd love to have you join us as Polyworlds continues to grow.</Card.Description>
     </Card.Header>
