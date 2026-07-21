@@ -1,8 +1,9 @@
 import { page } from "$app/state";
 import { createContext } from "svelte";
-import type { User } from "../types/User";
 import { browser } from "$app/env";
 import { getMainDomain } from "./domainUtils";
+
+type User = import("lucia").User;
 
 export class AppState {
   user = $state<User | null | undefined>(null);
