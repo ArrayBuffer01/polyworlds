@@ -66,6 +66,7 @@ export const forumPostsTable = pgTable("forum_posts", {
   id: serial("id").primaryKey(),
   forumId: integer("forum_id").notNull(),
   userId: integer("user_id").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
   content: varchar("content", { length: 4000 }).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow()
 });
@@ -108,7 +109,7 @@ export const forumPostRelations = relations(forumPostsTable, ({ many, one }) => 
   replies: many(forumPostRepliesTable)
 }));
 
-export const forumPostRepliesRelations = relations(forumPostRepliesTable, ({one}) => ({
+export const forumPostRepliesRelations = relations(forumPostRepliesTable, ({ one }) => ({
   post: one(forumPostsTable, {
     fields: [forumPostRepliesTable.postId],
     references: [forumPostsTable.id]
