@@ -11,7 +11,7 @@
   let { children, data } = $props();
 
   const appState = setAppContext(new AppState(untrack(() => data.user)));
-  
+
   $effect(() => {
     appState.user = data.user;
   });
