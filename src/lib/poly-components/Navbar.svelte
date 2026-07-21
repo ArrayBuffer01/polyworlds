@@ -36,10 +36,10 @@
           <i class="fa fa-shopping-basket"></i><span class="ml-2">Catalog</span>
         </a>
         <a
-          href="https://forum.polyworlds.net"
+          href="/forums"
           class="hover:bg-plw-red-dark flex h-15 cursor-pointer items-center bg-plw-red px-4 font-semibold text-plw-white transition duration-200 select-none"
         >
-          <i class="fa-solid fa-comment-dots"></i><span class="ml-2">Forum</span>
+          <i class="fa-solid fa-comment-dots"></i><span class="ml-2">Forums</span>
         </a>
       </div>
     </div>
