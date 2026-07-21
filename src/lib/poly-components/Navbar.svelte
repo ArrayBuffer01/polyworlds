@@ -11,8 +11,7 @@
     <!-- Aligned left -->
     <div class="flex items-center">
       <a href={appState.user ? "/dash" : "/"} class="flex cursor-pointer items-center p-1">
-        <img alt="Logo" src="/logo.png" class="h-15 w-15 select-none" />
-        <h2 class="ml-5 text-xl font-extrabold text-plw-white select-none">Polyworlds</h2>
+        <p class="ml-5 text-2xl font-super-bouncer text-plw-white select-none">POLYWORLDS!</p>
       </a>
       <span class="w-8"></span>
 
