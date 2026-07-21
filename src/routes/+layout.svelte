@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import "./layout.css";
-  import favicon from "$lib/assets/favicon.svg";
+  import favicon from "$lib/assets/favicon.png";
   import Navbar from "$lib/poly-components/Navbar.svelte";
   import { AppState, setAppContext } from "$lib/appState.svelte";
   import LandingNav from "$lib/poly-components/LandingNav.svelte";

@@ -6,6 +6,7 @@ import { db } from "$lib/server/db";
 import { usersTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { getMainDomain } from "$lib/domainUtils";
 
 export const load = (async () => {
   return {};
@@ -21,7 +22,7 @@ const registerSchema = z.object({
 });
 
 export const actions = {
-  signup: async ({ request, cookies }) => {
+  signup: async ({ request, cookies, url }) => {
     const formData = Object.fromEntries(await request.formData());
 
     const parsed = z.safeParse(registerSchema, formData);
@@ -61,8 +62,9 @@ export const actions = {
       const sessionCookie = lucia.createSessionCookie(session.id);
       console.log(session, sessionCookie);
       cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: ".",
-        ...sessionCookie.attributes
+        path: "/",
+        ...sessionCookie.attributes,
+        domain: getMainDomain(url.hostname)
       });
 
       return redirect(302, "/dash");

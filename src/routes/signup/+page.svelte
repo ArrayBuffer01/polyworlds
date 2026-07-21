@@ -46,7 +46,7 @@
 <div class="bg-plw-red flex items-center justify-center">
   <p class="text-white text-8xl tracking-tighter font-super-bouncer select-none">POLYWORLDS!</p>
 </div>
-<div class="flex items-center justify-center bg-white">
+<div class="flex items-center justify-center bg-accent">
   <Card.Root class="-my-4 w-full max-w-sm">
     <Card.Header>
       <Card.Title>Create an account</Card.Title>
@@ -138,87 +138,4 @@
     </Card.Content>
   </Card.Root>
 </div>
-  <!-- <div
-    class="flex h-auto w-sm flex-col space-y-3 rounded-md border border-neutral-250 bg-white p-5 pl-6"
-  >
-    <div class="flex w-full">
-      <div class="h-20 w-2/3">
-        <p class="font-bold">Create an account</p>
-        <p class="text-[15px] text-neutral-400">
-          Fill in the form below to create your account and start exploring Polyworlds.
-        </p>
-      </div>
-      <div class="flex w-1/3 items-start justify-end">
-        <a class="p-2 pr-3 font-semibold hover:underline" href="/login">Login</a>
-      </div>
-    </div>
-
-    <form
-      action="?/signup"
-      method="POST"
-      use:enhance={() => {
-        clearErrors();
-        loading = true;
-        return async ({ update }) => {
-          await update();
-          loading = false;
-        };
-      }}
-    >
-      <label for="username" class="text-left font-bold">Username</label>
-      <Input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="Username here..."
-        aria-invalid={fieldErrors.username.length > 0}
-        class="mt-1 mb-1 w-full rounded-sm border border-neutral-250 p-1 pl-3"
-      />
-      {#if fieldErrors.username.length > 0}
-        {#each fieldErrors.username as err, index (index)}
-          <p class="text-sm text-destructive">
-            {err}
-          </p>
-        {/each}
-      {/if}
-      <label for="email" class="text-left font-bold">Email</label>
-      <Input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="Email here..."
-        aria-invalid={fieldErrors.email.length > 0}
-        class="mb-1 w-full rounded-sm border border-neutral-250 p-1 pl-3"
-      />
-      {#if fieldErrors.email.length > 0}
-        {#each fieldErrors.email as err, index (index)}
-          <p class="text-sm text-destructive">
-            {err}
-          </p>
-        {/each}
-      {/if}
-      <label for="password" class="text-left font-bold">Password</label>
-      <Input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Password here..."
-        aria-invalid={fieldErrors.password.length > 0}
-        class="mb-1 w-full rounded-sm border border-neutral-250 p-1 pl-3"
-      />
-      {#if fieldErrors.password.length > 0}
-        {#each fieldErrors.password as err, index (index)}
-          <p class="text-sm text-destructive">
-            {err}
-          </p>
-        {/each}
-      {/if}
-      <Button type="submit" class="w-full bg-plw-red p-1.5 text-white" disabled={loading}>
-        {#if loading}
-          <Spinner />
-        {/if}
-        Sign Up
-      </Button>
-    </form>
-  </div>-->
 </div>

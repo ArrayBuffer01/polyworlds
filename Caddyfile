@@ -1,7 +1,14 @@
 https://polyworlds.net, https://www.polyworlds.net {
-  reverse_proxy app:3000
+  reverse_proxy app:3000 {
+    header_up X-Forwarded-Proto {schema}
+    header_up X-Forwarded-Host {host}
+  }
 }
 
-https://forum.polyworlds.net {
-  reverse_proxy forum-app:3000
+
+https://forum.polyworlds.net, https://www.polyworlds.net/forum {
+  reverse_proxy forum-app:3000 {
+    header_up X-Forwarded-Proto {schema}
+    header_up X-Forwarded-Host {host}
+  }
 }

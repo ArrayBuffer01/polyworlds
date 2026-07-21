@@ -1,18 +1,18 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { invalidateAll } from "$app/navigation";
 import { lucia } from "$lib/server/auth";
 import bcrypt from "bcrypt";
 import { db } from "$lib/server/db";
 import { usersTable } from "$lib/server/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import { getMainDomain } from "$lib/domainUtils";
 
 export const load = (async () => {
   return {};
 }) satisfies PageServerLoad;
 
 export const actions = {
-  login: async ({ request, cookies }) => {
+  login: async ({ request, cookies, url }) => {
     const data = await request.formData();
 
     const username = data.get("username")?.toString();
@@ -32,8 +32,9 @@ export const actions = {
         const session = await lucia.createSession(user.id, {});
         const sessionCookie = lucia.createSessionCookie(session.id);
         cookies.set(sessionCookie.name, sessionCookie.value, {
-          path: ".",
-          ...sessionCookie.attributes
+          path: "/",
+          ...sessionCookie.attributes,
+          domain: getMainDomain(url.hostname)
         });
 
         return redirect(302, "/dash");
