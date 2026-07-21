@@ -27,7 +27,7 @@ export class AppState {
         name: "theme",
         value: newTheme,
         domain: getMainDomain(page.url.hostname),
-        path: "."
+        path: "/"
       })
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }

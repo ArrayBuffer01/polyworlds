@@ -33,7 +33,7 @@ export const actions = {
         const session = await lucia.createSession(user.id, {});
         const sessionCookie = lucia.createSessionCookie(session.id);
         cookies.set(sessionCookie.name, sessionCookie.value, {
-          path: ".",
+          path: "/",
           ...sessionCookie.attributes,
           domain: getMainDomain(url.hostname)
         });

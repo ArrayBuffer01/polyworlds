@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ locals, cookies, url }) => {
     const sessionCookie = lucia.createBlankSessionCookie();
 
     cookies.set(sessionCookie.name, sessionCookie.value, {
-      path: ".",
+      path: "/",
       ...sessionCookie.attributes,
       domain: getMainDomain(url.hostname)
     });
