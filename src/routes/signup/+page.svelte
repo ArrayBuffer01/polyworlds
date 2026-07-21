@@ -42,7 +42,11 @@
   <title>Signup | Polyworlds</title>
 </svelte:head>
 
-<div class="flex h-screen items-center justify-center">
+<div class="grid h-screen grid-cols-2">
+<div class="bg-plw-red flex items-center justify-center">
+  <p class="text-white text-6xl font-black">POLYWORLDS</p>
+</div>
+<div class="flex items-center justify-center bg-white">
   <Card.Root class="-my-4 w-full max-w-sm">
     <Card.Header>
       <Card.Title>Create an account</Card.Title>
@@ -133,7 +137,7 @@
       </form>
     </Card.Content>
   </Card.Root>
-
+</div>
   <!-- <div
     class="flex h-auto w-sm flex-col space-y-3 rounded-md border border-neutral-250 bg-white p-5 pl-6"
   >

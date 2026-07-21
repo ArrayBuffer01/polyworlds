@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import "./layout.css";
   import favicon from "$lib/assets/favicon.svg";
   import Navbar from "$lib/poly-components/Navbar.svelte";
@@ -39,10 +40,12 @@
   />
 </svelte:head>
 
-{#if appState.landingPageActive}
-  <LandingNav />
-{:else}
-  <Navbar />
+{#if page.url.pathname != "/login" && page.url.pathname != "/signup"}
+  {#if appState.landingPageActive}
+    <LandingNav />
+  {:else}
+    <Navbar />
+  {/if}
 {/if}
 
 <main class="grow">
