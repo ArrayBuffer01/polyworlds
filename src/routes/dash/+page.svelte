@@ -19,6 +19,7 @@
   import { page } from "$app/state";
   import CooldownZone from "$lib/poly-components/CooldownZone.svelte";
 
+  const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true")
 
   // Modal state
   let open = $state(false);
@@ -79,7 +80,6 @@
 
 {#if !appState.isLoggedIn}
   <div class="p-20 flex flex-col items-center justify-center w-full gap-4">
-    {const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true")}
      {#if loggedOutMessage}
       <h1 class="flex text-2xl border p-2 text-center w-fit items-center justify-center bg-green-500 rounded text-white">You have been logged out!</h1>
     {/if}
