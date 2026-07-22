@@ -19,7 +19,8 @@
   import { page } from "$app/state";
   import CooldownZone from "$lib/poly-components/CooldownZone.svelte";
 
-  const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true")
+  const loggedOutMessage = $derived(page.url.searchParams.get("logged_out") === "true");
+  const issues = $derived(postFeed.fields.content.issues());
 
   // Modal state
   let open = $state(false);
@@ -203,7 +204,6 @@
                 rows={4}
               />
             </Field.Field>
-            {const issues = $derived(postFeed.fields.content.issues());}
             {#if issues && issues.length}
               {#each issues as issue (issue)}
                 <p class="text-red-500">{issue.message}</p>
