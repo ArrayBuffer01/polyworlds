@@ -3,9 +3,7 @@ import { medalsTable, ownedMedalsTable, usersTable } from "$lib/server/db/schema
 import { eq, getTableColumns } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 import { error } from "@sveltejs/kit";
-
-const { passwordHash, email, lastReward, gold, coins, ...restUserColumns } =
-  getTableColumns(usersTable);
+import { userTableColumns } from "$lib/tableColumns";
 
 export const load = (async ({ params }) => {
   const userId = parseInt(params.id);
@@ -16,7 +14,7 @@ export const load = (async ({ params }) => {
 
   const rows = await db
     .select({
-      user: restUserColumns,
+      user: userTableColumns,
       medal: getTableColumns(medalsTable)
     })
     .from(usersTable)
