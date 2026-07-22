@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { Button } from "$lib/components/ui/button";
   import type { PageProps } from "./$types";
 
   let { data }: PageProps = $props();
 </script>
 
 <div class="p-20">
+  <Button href="/forums/{data.forum.id}/create">Create Post</Button>
   {#if data.posts.length < 1}
     <h1>No posts found on this forum.</h1>
   {:else}
@@ -17,4 +19,6 @@
       {/each}
     </div>
   {/if}
+
+
 </div>
