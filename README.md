@@ -1,7 +1,9 @@
 # Polyworlds
+
 This repository contains the source code for Polyworls' site
 
 # Tech Stack
+
 Frontend: SvelteKit
 
 Backend: SvelteKit

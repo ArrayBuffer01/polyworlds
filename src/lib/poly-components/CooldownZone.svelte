@@ -20,7 +20,7 @@
 
     return () => {
       clearInterval(interval);
-    }
+    };
   });
 </script>
 

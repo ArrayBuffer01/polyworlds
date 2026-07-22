@@ -9,7 +9,7 @@ export class AppState {
   user = $state<User | null | undefined>(null);
   landingPageActive = $derived<boolean>(this.user == null && page.url.pathname === "/");
   #currentTheme = $state<string>("light");
-  
+
   constructor(user?: User) {
     if (user) {
       this.user = user;
@@ -29,7 +29,7 @@ export class AppState {
         value: newTheme,
         domain: getMainDomain(page.url.hostname),
         path: "/"
-      })
+      });
       document.documentElement.classList.toggle("dark", newTheme === "dark");
     }
   }

@@ -6,7 +6,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   const sessionId = event.cookies.get(lucia.sessionCookieName);
 
   if (!sessionId) {
-    console.log("User not set.")
+    console.log("User not set.");
   } else {
     const { session, user } = await lucia.validateSession(sessionId);
 

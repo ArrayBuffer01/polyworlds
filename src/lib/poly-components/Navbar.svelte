@@ -11,7 +11,7 @@
     <!-- Aligned left -->
     <div class="flex items-center">
       <a href={appState.user ? "/dash" : "/"} class="flex cursor-pointer items-center p-1">
-        <p class="ml-5 text-2xl font-super-bouncer text-plw-white select-none">POLYWORLDS!</p>
+        <p class="ml-5 font-super-bouncer text-2xl text-plw-white select-none">POLYWORLDS!</p>
       </a>
       <span class="w-8"></span>
 
@@ -97,7 +97,7 @@
               <li
                 class="mb-1 cursor-pointer px-4 py-2 font-semibold text-plw-red transition duration-100 select-none hover:bg-rose-50"
               >
-                <a href="/logout?return_to={encodeURIComponent("/dash?logged_out=true")}">Logout</a>
+                <a href="/logout?return_to={encodeURIComponent('/dash?logged_out=true')}">Logout</a>
               </li>
             </ul>
           </div>

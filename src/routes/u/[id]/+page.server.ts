@@ -27,7 +27,7 @@ export const load = (async ({ params }) => {
   if (!rows.length) {
     error(404, "This user does not exist!");
   }
-  
+
   return {
     profile: {
       ...rows[0].user,

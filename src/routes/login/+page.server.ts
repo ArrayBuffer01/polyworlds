@@ -40,7 +40,7 @@ export const actions = {
         return redirect(302, "/dash");
       }
     }
-    
+
     return fail(400, { error: "Invalid username or password" });
   }
 } satisfies Actions;

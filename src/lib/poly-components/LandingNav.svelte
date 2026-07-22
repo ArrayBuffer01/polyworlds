@@ -18,7 +18,7 @@
       >
       <a
         href="/signup"
-        class="w-full rounded-md bg-green-700 p-2 text-center text-plw-white hover:underline mx-4"
+        class="mx-4 w-full rounded-md bg-green-700 p-2 text-center text-plw-white hover:underline"
         >Signup</a
       >
     </div>
