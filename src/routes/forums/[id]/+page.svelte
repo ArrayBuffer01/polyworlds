@@ -16,9 +16,9 @@
     <h1>No posts found on this forum.</h1>
   {:else}
     <div class="flex flex-col gap-2">
-      {#each data.posts as post (post.forum_posts.id)}
+      {#each data.posts as post (post.post.id)}
         <div class="border border-plw-red">
-          <a href="/forums/{post.forum_posts.forumId}/posts/{post.forum_posts.id}">{post.forum_posts.title}</a>
+          <a href="/forums/{post.post.forumId}/posts/{post.post.id}">{post.post.title}</a>
           <p>By {post.user?.username}</p>
         </div>
       {/each}
