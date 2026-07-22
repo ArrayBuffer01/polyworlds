@@ -7,6 +7,7 @@ export const load = (async ({ params }) => {
   const forums = await db
     .select()
     .from(forumsTable)
-    .where(eq(forumsTable.id, parseInt(params.id))).limit(1);
+    .where(eq(forumsTable.id, parseInt(params.id)))
+    .limit(1);
   return { forum: forums[0] };
 }) satisfies LayoutServerLoad;

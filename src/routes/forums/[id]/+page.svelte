@@ -4,7 +4,6 @@
   let { data }: PageProps = $props();
 </script>
 
-
 <div class="p-20">
   {#if data.posts.length < 1}
     <h1>No posts found on this forum.</h1>
