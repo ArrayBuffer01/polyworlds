@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { getAppContext } from "$lib/appState.svelte";
   import { Button } from "$lib/components/ui/button";
   import type { PageProps } from "./$types";
 
+  const appState = getAppContext();
   let { data }: PageProps = $props();
 </script>
 
 <div class="p-20">
-  <Button href="/forums/{data.forum.id}/create">Create Post</Button>
+  {#if appState.isLoggedIn}
+    <Button href="/forums/{data.forum.id}/create">Create Post</Button>
+  {/if}
+
   {#if data.posts.length < 1}
     <h1>No posts found on this forum.</h1>
   {:else}
@@ -19,6 +24,4 @@
       {/each}
     </div>
   {/if}
-
-
 </div>
