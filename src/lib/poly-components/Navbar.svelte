@@ -52,7 +52,7 @@
         >
         <p class="font-semibold text-plw-white">
           <i class="fa fa-fire text-amber-500"></i>
-          <span class="ml-2 text-amber-500 select-none">{appState.user.gold}</span>
+          <span class="ml-2 text-amber-500 select-none">{appState.user.loginStreak}</span>
         </p>
         <span class="w-4"></span>
         <p class="font-semibold text-plw-white">

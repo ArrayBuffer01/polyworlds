@@ -1,5 +1,6 @@
 import { getMainDomain } from "$lib/domainUtils";
 import { lucia } from "$lib/server/auth";
+import { updateLoginStreak } from "$lib/server/loginStreak";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -28,8 +29,12 @@ export const handle: Handle = async ({ event, resolve }) => {
       });
     }
 
-    event.locals.user = user ?? undefined;
-    event.locals.session = session ?? undefined;
+    if (user) {
+      user.loginStreak = await updateLoginStreak(user);
+      
+      event.locals.user = user ?? undefined;
+      event.locals.session = session ?? undefined;
+    }
   }
 
   const response = await resolve(event);

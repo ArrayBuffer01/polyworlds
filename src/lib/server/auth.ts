@@ -18,7 +18,9 @@ export const lucia = new Lucia(adapter, {
     createdAt: data.createdAt,
     gold: data.gold,
     coins: data.coins,
-    lastReward: data.lastReward
+    lastReward: data.lastReward,
+    loginStreak: data.loginStreak,
+    lastLogin: data.lastLogin
   })
 });
 
@@ -39,4 +41,6 @@ interface DatabaseUserAttributes {
   gold: number;
   coins: number;
   lastReward: Date;
+  loginStreak: number;
+  lastLogin: Date;
 }

@@ -13,7 +13,7 @@ export class DailyRewardState {
   countdown = $derived.by(() => {
     if (this.rewardAvailable) return null;
     const totalSeconds = Math.ceil(this.msUntilNextReward / 1000);
-
+    
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;

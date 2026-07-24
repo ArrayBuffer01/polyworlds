@@ -19,7 +19,9 @@ export const usersTable = pgTable("user", {
   gold: integer("gold").notNull().default(0),
   coins: integer("coins").notNull().default(0),
   lastReward: timestamp("last_reward"),
-  bio: varchar("bio", { length: 2000 })
+  bio: varchar("bio", { length: 2000 }),
+  loginStreak: integer("login_streak").default(1),
+  lastLogin: timestamp("last_login").notNull().defaultNow()
 });
 
 export const userRelations = relations(usersTable, ({ many }) => ({
