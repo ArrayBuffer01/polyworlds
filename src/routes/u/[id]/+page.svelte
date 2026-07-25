@@ -36,7 +36,11 @@
     <div class="flex flex-col gap-4">
       <div class="rounded border p-4 hover:border-plw-red">
         <div class="mt-2 flex items-center gap-4">
-          <img src="/profile.png" alt="Profile" class="shrink-0 rounded-2xl" />
+          <img
+            src={profile.avatarUrl ?? "/profile.png"}
+            alt={`${profile.username}'s avatar`}
+            class="shrink-0 rounded-2xl"
+          />
           <h2 class="ml-4 text-2xl font-light">{profile.username}</h2>
         </div>
 

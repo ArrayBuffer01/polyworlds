@@ -412,7 +412,12 @@ func configHash(cfg AvatarConfig) string {
 	return hex.EncodeToString(sum[:])[:12]
 }
 
-func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (string, error) {
+type RenderResult struct {
+	Hash string `json:"hash"`
+	URL  string `json:"url"`
+}
+
+func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (RenderResult, error) {
 	assetsDir := os.Getenv("ASSETS_DIR")
 	if assetsDir == "" {
 		assetsDir = "/assets"
@@ -427,7 +432,7 @@ func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (string, error) {
 
 	targetDir := filepath.Join(assetsDir, category)
 	if err := os.MkdirAll(targetDir, 0o755); err != nil {
-		return "", err
+		return RenderResult{}, err
 	}
 
 	filename := configHash(cfg) + ".png"
@@ -436,14 +441,14 @@ func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (string, error) {
 	// content-addressed: if this exact visual config was already rendered
 	// (by anyone, for anything), the file already exists — skip the write
 	if _, err := os.Stat(fullPath); err == nil {
-		return fmt.Sprintf("%s/%s/%s", baseURL, category, filename), nil
+		return RenderResult{Hash: configHash(cfg), URL: fmt.Sprintf("%s/%s/%s", baseURL, category, filename)}, nil
 	}
 
 	if err := os.WriteFile(fullPath, pngBytes, 0o644); err != nil {
-		return "", err
+		return RenderResult{}, err
 	}
 
-	return fmt.Sprintf("%s/%s/%s", baseURL, category, filename), nil
+	return RenderResult{Hash: configHash(cfg), URL: fmt.Sprintf("%s/%s/%s", baseURL, category, filename)}, nil
 }
 
 func handleRender(w http.ResponseWriter, r *http.Request) {
@@ -460,7 +465,7 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 
 	imgBytes := renderAvatar(cfg)
 
-	url, err := saveRenderedPNG(cfg, imgBytes)
+	result, err := saveRenderedPNG(cfg, imgBytes)
 	if err != nil {
 		log.Printf("failed to save rendered avatar: %v", err)
 		http.Error(w, "failed to save render", http.StatusInternalServerError)
@@ -468,7 +473,7 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"url": url})
+	json.NewEncoder(w).Encode(result)
 }
 
 func main() {

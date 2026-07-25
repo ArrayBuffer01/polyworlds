@@ -7,6 +7,7 @@ import { usersTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getMainDomain } from "$lib/domainUtils";
+import { renderDefaultAvatar } from "$lib/server/avatarRenderer";
 
 export const load = (async () => {
   return {};
@@ -45,12 +46,23 @@ export const actions = {
 
     const passwordHash = bcrypt.hashSync(password, 10);
 
+    let avatarHash: string;
+    try {
+      avatarHash = await renderDefaultAvatar();
+    } catch (error) {
+      console.error("Default avatar rendering failed:", error);
+      return fail(503, {
+        error: "Avatar creation is temporarily unavailable. Please try again."
+      });
+    }
+
     const newUser = await db
       .insert(usersTable)
       .values({
         username,
         email,
         passwordHash,
+        avatarHash,
         createdAt: new Date(),
         gold: 0,
         coins: 0

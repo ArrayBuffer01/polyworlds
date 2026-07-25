@@ -4,6 +4,7 @@ services:
     environment:
       DATABASE_URL: postgres://polyworlds:${DB_PASSWORD}@db:5432/polyworlds_db
       PORT: 3000
+      RENDERER_URL: http://renderer:3001
     depends_on:
       - db
     volumes:
@@ -26,6 +27,7 @@ services:
     environment:
       - ASSETS_DIR=/assets
       - ASSET_BASE_URL=https://assets.polyworlds.net
+    networks: [internal]
   caddy:
     image: caddy:2-alpine
     ports:

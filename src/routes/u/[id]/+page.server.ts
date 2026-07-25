@@ -4,6 +4,7 @@ import { eq, getTableColumns } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 import { error } from "@sveltejs/kit";
 import { userTableColumns } from "$lib/tableColumns";
+import { avatarUrlForHash } from "$lib/server/avatarRenderer";
 
 export const load = (async ({ params }) => {
   const userId = parseInt(params.id);
@@ -29,6 +30,7 @@ export const load = (async ({ params }) => {
   return {
     profile: {
       ...rows[0].user,
+      avatarUrl: avatarUrlForHash(rows[0].user.avatarHash),
       medals: rows.map((row) => row.medal).filter((medal) => !!medal)
     }
   };

@@ -20,6 +20,7 @@ export const usersTable = pgTable("user", {
   coins: integer("coins").notNull().default(0),
   lastReward: timestamp("last_reward"),
   bio: varchar("bio", { length: 2000 }),
+  avatarHash: varchar("avatar_hash", { length: 12 }),
   loginStreak: integer("login_streak").default(1),
   lastLogin: timestamp("last_login").notNull().defaultNow()
 });

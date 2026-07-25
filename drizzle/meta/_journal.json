@@ -15,6 +15,13 @@
       "when": 1784583374150,
       "tag": "0001_clever_sway",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784982143216,
+      "tag": "0002_add_avatar_hash",
+      "breakpoints": true
     }
   ]
 }
