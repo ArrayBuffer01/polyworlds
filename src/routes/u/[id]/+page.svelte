@@ -35,13 +35,13 @@
   <div class="mt-6 grid grid-cols-1 gap-2 lg:grid-cols-2">
     <div class="flex flex-col gap-4">
       <div class="rounded border p-4 hover:border-plw-red">
-        <div class="mt-2 flex items-center gap-4">
+        <h2 class="text-2xl font-light">{profile.username}</h2>
+        <div class="mt-4 flex items-center gap-4">
           <img
             src={profile.avatarUrl ?? "/profile.png"}
             alt={`${profile.username}'s avatar`}
-            class="shrink-0 rounded-2xl"
+            class="h-24 w-24 shrink-0 rounded-2xl object-cover"
           />
-          <h2 class="ml-4 text-2xl font-light">{profile.username}</h2>
         </div>
 
         <h3 class="mt-4 font-extrabold">About {profile.username}</h3>
