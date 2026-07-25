@@ -15,7 +15,7 @@ export async function updateLoginStreak(user: User) {
   } else if (deltaDays === 1) {
     streak++;
   }
-  
+
   if (streak != user.loginStreak) {
     await db
       .update(usersTable)

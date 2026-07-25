@@ -5,10 +5,7 @@ https://polyworlds.net, https://www.polyworlds.net {
   }
 }
 
-
-https://forum.polyworlds.net, https://www.polyworlds.net/forum {
-  reverse_proxy forum-app:3000 {
-    header_up X-Forwarded-Proto {schema}
-    header_up X-Forwarded-Host {host}
-  }
+https://assets.polyworlds.net {
+  root /avatars/* /srv/assets/avatars
+  file_server
 }
