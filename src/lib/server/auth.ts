@@ -2,7 +2,7 @@ import { dev } from "$app/environment";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { Lucia } from "lucia";
 import { db } from "./db";
-import { sessionTable, usersTable } from "./db/schema";
+import { sessionTable, usersTable, UserRole } from "./db/schema";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, usersTable);
 
@@ -48,5 +48,5 @@ interface DatabaseUserAttributes {
   lastLogin: Date;
   avatarHash: string | null;
   avatarHeadshotHash: string | null;
-  role: "user" | "admin";
+  role: UserRole;
 }
