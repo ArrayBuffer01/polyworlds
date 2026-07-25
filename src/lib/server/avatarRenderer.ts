@@ -3,15 +3,22 @@ import { env } from "$env/dynamic/private";
 
 const assetBaseUrl = env.ASSET_BASE_URL ?? (dev ? "" : "https://assets.polyworlds.net");
 
-export type AvatarColors = Record<"Head" | "Torso" | "RightArm" | "LeftArm" | "RightLeg" | "LeftLeg", string>;
+export interface AvatarColors {
+  head: string;
+  torso: string;
+  rightArm: string;
+  leftArm: string;
+  rightLeg: string;
+  leftLeg: string;
+}
 
 export const defaultAvatarColors: AvatarColors = {
-  Head: "#E7C3A5",
-  Torso: "#5C7CFA",
-  RightArm: "#E7C3A5",
-  LeftArm: "#E7C3A5",
-  RightLeg: "#34495E",
-  LeftLeg: "#34495E"
+  head: "#E7C3A5",
+  torso: "#5C7CFA",
+  rightArm: "#E7C3A5",
+  leftArm: "#E7C3A5",
+  rightLeg: "#34495E",
+  leftLeg: "#34495E"
 };
 
 export function avatarUrlForHash(hash: string | null): string | null {
