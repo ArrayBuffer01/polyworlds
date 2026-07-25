@@ -6,10 +6,7 @@ import { eq } from "drizzle-orm";
 
 export async function updateLoginStreak(user: User) {
   const now = new Date();
-  console.log(user.lastLogin);
   const deltaDays = Math.floor((now.getTime() - user.lastLogin.getTime()) / ONE_DAY);
-
-  console.log("Delta days: ", deltaDays);
 
   let streak: number = user.loginStreak;
 
@@ -18,7 +15,7 @@ export async function updateLoginStreak(user: User) {
   } else if (deltaDays === 1) {
     streak++;
   }
-
+  
   if (streak != user.loginStreak) {
     await db
       .update(usersTable)
