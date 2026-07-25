@@ -6,19 +6,19 @@
   import type { AvatarColors } from "$lib/server/avatarRenderer";
   let { data, form }: PageProps = $props();
   let saving = $state(false);
-  const parts = ["head", "torso", "rightArm", "leftArm", "rightLeg", "leftLeg"] as const;
+  const parts = ["Head", "Torso", "RightArm", "LeftArm", "RightLeg", "LeftLeg"] as const;
 
   const colors = $derived<AvatarColors>(form?.colors ?? data.colors);
 
   const avatarUrl = $derived(form?.avatarUrl ?? data.avatarUrl);
   const headshotUrl = $derived(form?.headshotUrl ?? data.headshotUrl);
   const labels: AvatarColors = {
-    head: "Head",
-    torso: "Torso",
-    rightArm: "Right arm",
-    leftArm: "Left arm",
-    rightLeg: "Right leg",
-    leftLeg: "Left leg"
+    Head: "Head",
+    Torso: "Torso",
+    RightArm: "Right arm",
+    LeftArm: "Left arm",
+    RightLeg: "Right leg",
+    LeftLeg: "Left leg"
   };
 </script>
 

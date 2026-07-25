@@ -14,24 +14,24 @@ import { z } from "zod";
 
 const color = z.string().regex(/^#[0-9a-fA-F]{6}$/, "Choose a valid color.");
 const avatarSchema = z.object({
-  head: color,
-  torso: color,
-  rightArm: color,
-  leftArm: color,
-  rightLeg: color,
-  leftLeg: color
+  Head: color,
+  Torso: color,
+  RightArm: color,
+  LeftArm: color,
+  RightLeg: color,
+  LeftLeg: color
 });
 
 export const load = (async ({ locals }) => {
   if (!locals.user) redirect(303, "/login");
   const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, locals.user.id) });
   const colors: AvatarColors = {
-    head: user?.avatarHead ?? user?.avatarSkin ?? defaultAvatarColors.head,
-    torso: user?.avatarTorso ?? user?.avatarShirt ?? defaultAvatarColors.torso,
-    rightArm: user?.avatarRightArm ?? user?.avatarSkin ?? defaultAvatarColors.rightArm,
-    leftArm: user?.avatarLeftArm ?? user?.avatarSkin ?? defaultAvatarColors.leftArm,
-    rightLeg: user?.avatarRightLeg ?? user?.avatarPants ?? defaultAvatarColors.rightLeg,
-    leftLeg: user?.avatarLeftLeg ?? user?.avatarPants ?? defaultAvatarColors.leftLeg
+    Head: user?.avatarHead ?? user?.avatarSkin ?? defaultAvatarColors.Head,
+    Torso: user?.avatarTorso ?? user?.avatarShirt ?? defaultAvatarColors.Torso,
+    RightArm: user?.avatarRightArm ?? user?.avatarSkin ?? defaultAvatarColors.RightArm,
+    LeftArm: user?.avatarLeftArm ?? user?.avatarSkin ?? defaultAvatarColors.LeftArm,
+    RightLeg: user?.avatarRightLeg ?? user?.avatarPants ?? defaultAvatarColors.RightLeg,
+    LeftLeg: user?.avatarLeftLeg ?? user?.avatarPants ?? defaultAvatarColors.LeftLeg
   };
   return {
     colors,
@@ -52,12 +52,12 @@ export const actions = {
         .set({
           avatarHash: hashes.avatarHash,
           avatarHeadshotHash: hashes.headshotHash,
-          avatarHead: parsed.data.head,
-          avatarTorso: parsed.data.torso,
-          avatarRightArm: parsed.data.rightArm,
-          avatarLeftArm: parsed.data.leftArm,
-          avatarRightLeg: parsed.data.rightLeg,
-          avatarLeftLeg: parsed.data.leftLeg
+          avatarHead: parsed.data.Head,
+          avatarTorso: parsed.data.Torso,
+          avatarRightArm: parsed.data.RightArm,
+          avatarLeftArm: parsed.data.LeftArm,
+          avatarRightLeg: parsed.data.RightLeg,
+          avatarLeftLeg: parsed.data.LeftLeg
         })
         .where(eq(usersTable.id, locals.user.id));
       return {

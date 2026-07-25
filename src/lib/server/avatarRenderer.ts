@@ -4,21 +4,21 @@ import { env } from "$env/dynamic/private";
 const assetBaseUrl = env.ASSET_BASE_URL ?? (dev ? "" : "https://assets.polyworlds.net");
 
 export interface AvatarColors {
-  head: string;
-  torso: string;
-  rightArm: string;
-  leftArm: string;
-  rightLeg: string;
-  leftLeg: string;
+  Head: string;
+  Torso: string;
+  RightArm: string;
+  LeftArm: string;
+  RightLeg: string;
+  LeftLeg: string;
 }
 
 export const defaultAvatarColors: AvatarColors = {
-  head: "#E7C3A5",
-  torso: "#5C7CFA",
-  rightArm: "#E7C3A5",
-  leftArm: "#E7C3A5",
-  rightLeg: "#34495E",
-  leftLeg: "#34495E"
+  Head: "#E7C3A5",
+  Torso: "#5C7CFA",
+  RightArm: "#E7C3A5",
+  LeftArm: "#E7C3A5",
+  RightLeg: "#34495E",
+  LeftLeg: "#34495E"
 };
 
 export function avatarUrlForHash(hash: string | null): string | null {
@@ -34,7 +34,7 @@ export async function renderAvatar(colors: AvatarColors): Promise<{ avatarHash: 
   const response = await fetch(`${rendererUrl}/render`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ category: "avatars", skin: colors.head, shirt: colors.torso, pants: colors.rightLeg, partColors: colors, accessories: [] }),
+    body: JSON.stringify({ category: "avatars", skin: colors.Head, shirt: colors.Torso, pants: colors.RightLeg, partColors: colors, accessories: [] }),
     signal: AbortSignal.timeout(10_000)
   });
   if (!response.ok) throw new Error(`Avatar renderer returned ${response.status}`);
