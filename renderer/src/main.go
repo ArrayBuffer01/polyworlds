@@ -417,10 +417,8 @@ func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (string, error) {
 	if assetsDir == "" {
 		assetsDir = "/assets"
 	}
+
 	baseURL := os.Getenv("ASSET_BASE_URL")
-	if baseURL == "" {
-		baseURL = "https://assets.yourdomain.com"
-	}
 
 	category := cfg.Category
 	if category == "" {
