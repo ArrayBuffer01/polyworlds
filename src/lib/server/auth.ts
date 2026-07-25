@@ -21,8 +21,9 @@ export const lucia = new Lucia(adapter, {
     lastReward: data.lastReward,
     loginStreak: data.loginStreak,
     lastLogin: data.lastLogin,
-    avatarHash: data.avatarHash
-    ,avatarHeadshotHash: data.avatarHeadshotHash
+    avatarHash: data.avatarHash,
+    avatarHeadshotHash: data.avatarHeadshotHash,
+    role: data.role
   })
 });
 
@@ -47,4 +48,5 @@ interface DatabaseUserAttributes {
   lastLogin: Date;
   avatarHash: string | null;
   avatarHeadshotHash: string | null;
+  role: "user" | "admin";
 }

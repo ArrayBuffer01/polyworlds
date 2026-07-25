@@ -16,10 +16,19 @@ https://polyworlds.net, https://www.polyworlds.net {
   }
 }
 
+(textures) {
+  handle_path /textures/* {
+    root * /srv/textures
+    file_server
+  }
+}
+
 https://assets.polyworlds.net {
   import avatars
+  import textures
 }
 
 http://localhost {
   import avatars
+  import textures
 }

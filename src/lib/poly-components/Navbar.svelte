@@ -93,6 +93,13 @@
               >
                 <a class="w-full" href="/avatar">Edit Avatar</a>
               </li>
+              {#if appState.user.role === "admin"}
+                <li
+                  class="cursor-pointer px-4 py-2 font-semibold text-plw-black transition duration-100 select-none hover:bg-zinc-100"
+                >
+                  <a class="w-full" href="/admin">Admin</a>
+                </li>
+              {/if}
               <hr class="m-2 mr-5 ml-5 justify-center text-gray-200" />
               <li
                 class="mb-1 cursor-pointer px-4 py-2 font-semibold text-plw-red transition duration-100 select-none hover:bg-rose-50"

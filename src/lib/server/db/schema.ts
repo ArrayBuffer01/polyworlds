@@ -7,8 +7,11 @@ import {
   varchar,
   timestamp,
   primaryKey,
-  boolean
+  boolean,
+  pgEnum
 } from "drizzle-orm/pg-core";
+
+export const userRoleEnum = pgEnum("user_role", ["user", "admin"]);
 
 export const usersTable = pgTable("user", {
   id: serial("id").primaryKey(),
@@ -32,7 +35,8 @@ export const usersTable = pgTable("user", {
   avatarRightLeg: varchar("avatar_right_leg", { length: 7 }),
   avatarLeftLeg: varchar("avatar_left_leg", { length: 7 }),
   loginStreak: integer("login_streak").default(1),
-  lastLogin: timestamp("last_login").notNull().defaultNow()
+  lastLogin: timestamp("last_login").notNull().defaultNow(),
+  role: userRoleEnum("role").notNull().default("user")
 });
 
 export const userRelations = relations(usersTable, ({ many }) => ({

@@ -193,14 +193,19 @@ var (
 	light        = V(0.5, 1, 1).Normalize()
 	defaultColor = HexColor("#E7E7E7FF")
 
-	baseAvatar  *AvatarMesh      // loaded once at startup, reused for every request
-	accessories map[string]*Mesh // catalog of accessory meshes (hats, glasses, backpacks, ...), keyed by filename
+	// Resolved once at startup from environment variables.
+	assetsDir  string
+	baseURL    string
+	texturesDir string
 
-	textureIndex map[string]string // id -> filepath, built at startup (cheap: just a directory listing, no decoding)
+	baseAvatar  *AvatarMesh
+	accessories map[string]*Mesh
+
+	textureIndex map[string]string
 	textureCache = struct {
 		sync.RWMutex
 		m map[string]Texture
-	}{m: make(map[string]Texture)} // actual decoded textures, populated on first use only
+	}{m: make(map[string]Texture)}
 )
 
 // AvatarConfig is the JSON body the SvelteKit app sends.
@@ -430,16 +435,9 @@ type RenderResult struct {
 }
 
 func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (RenderResult, error) {
-	assetsDir := os.Getenv("ASSETS_DIR")
-	if assetsDir == "" {
-		assetsDir = "/assets"
-	}
-
-	baseURL := os.Getenv("ASSET_BASE_URL")
-
 	category := cfg.Category
 	if category == "" {
-		category = "renders" // generic fallback bucket if the caller doesn't specify one
+		category = "renders"
 	}
 
 	targetDir := filepath.Join(assetsDir, category)
@@ -447,20 +445,57 @@ func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (RenderResult, error) {
 		return RenderResult{}, err
 	}
 
-	filename := configHash(cfg) + ".png"
+	hash := configHash(cfg)
+	filename := hash + ".png"
 	fullPath := filepath.Join(targetDir, filename)
+	url := fmt.Sprintf("%s/%s/%s", baseURL, category, filename)
 
-	// content-addressed: if this exact visual config was already rendered
-	// (by anyone, for anything), the file already exists — skip the write
 	if _, err := os.Stat(fullPath); err == nil {
-		return RenderResult{Hash: configHash(cfg), URL: fmt.Sprintf("%s/%s/%s", baseURL, category, filename)}, nil
+		return RenderResult{Hash: hash, URL: url}, nil
 	}
 
 	if err := os.WriteFile(fullPath, pngBytes, 0o644); err != nil {
 		return RenderResult{}, err
 	}
 
-	return RenderResult{Hash: configHash(cfg), URL: fmt.Sprintf("%s/%s/%s", baseURL, category, filename)}, nil
+	return RenderResult{Hash: hash, URL: url}, nil
+}
+
+func handleTextures(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "GET only", http.StatusMethodNotAllowed)
+		return
+	}
+
+	type textureEntry struct {
+		ID       string `json:"id"`
+		FilePath string `json:"filePath"`
+	}
+
+	entries := make([]textureEntry, 0, len(textureIndex))
+	for id, fp := range textureIndex {
+		entries = append(entries, textureEntry{ID: id, FilePath: fp})
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(entries)
+}
+
+func handleReloadTextures(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "POST only", http.StatusMethodNotAllowed)
+		return
+	}
+
+	textureCache.Lock()
+	textureCache.m = make(map[string]Texture)
+	textureCache.Unlock()
+
+	textureIndex = buildTextureIndex(texturesDir)
+	log.Printf("reloaded texture index: %d textures", len(textureIndex))
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]int{"count": len(textureIndex)})
 }
 
 func handleRender(w http.ResponseWriter, r *http.Request) {
@@ -499,10 +534,11 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	avatarPath := os.Getenv("AVATAR_OBJ_PATH")
-	if avatarPath == "" {
-		avatarPath = "/assets/avatar.obj"
-	}
+	assetsDir = envOr("ASSETS_DIR", "/assets")
+	baseURL = os.Getenv("ASSET_BASE_URL")
+	texturesDir = envOr("TEXTURES_DIR", "/assets/textures")
+	accessoriesDir := envOr("ACCESSORIES_DIR", "/assets/accessories")
+	avatarPath := envOr("AVATAR_OBJ_PATH", "/assets/avatar.obj")
 
 	mesh, err := LoadAvatarOBJ(avatarPath)
 	if err != nil {
@@ -511,21 +547,22 @@ func main() {
 	mesh.SmoothNormalsThreshold(Radians(30))
 	baseAvatar = mesh
 
-	accessoriesDir := os.Getenv("ACCESSORIES_DIR")
-	if accessoriesDir == "" {
-		accessoriesDir = "/assets/accessories"
-	}
 	accessories = loadAccessoryCatalog(accessoriesDir)
 	log.Printf("loaded %d catalog accessories", len(accessories))
 
-	texturesDir := os.Getenv("TEXTURES_DIR")
-	if texturesDir == "" {
-		texturesDir = "/assets/textures"
-	}
 	textureIndex = buildTextureIndex(texturesDir)
 	log.Printf("indexed %d catalog textures (loaded lazily on first use)", len(textureIndex))
 
 	http.HandleFunc("/render", handleRender)
+	http.HandleFunc("/textures", handleTextures)
+	http.HandleFunc("/textures/reload", handleReloadTextures)
 	log.Println("avatar-renderer listening on :3001")
 	log.Fatal(http.ListenAndServe(":3001", nil))
+}
+
+func envOr(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
 }
