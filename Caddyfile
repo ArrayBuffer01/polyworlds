@@ -6,6 +6,8 @@ https://polyworlds.net, https://www.polyworlds.net {
 }
 
 https://assets.polyworlds.net {
-  root /avatars/* /srv/assets/avatars
-  file_server
+  handle_path /avatars/* {
+    root * /srv/assets/avatars
+    file_server
+  }
 }

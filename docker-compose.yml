@@ -21,6 +21,8 @@ services:
   renderer:
     build: ./renderer
     restart: unless-stopped
+    volumes:
+      - assets_data:/assets
     environment:
       - ASSETS_DIR=/assets
       - ASSET_BASE_URL=https://assets.polyworlds.net
