@@ -34,7 +34,7 @@ export async function renderAvatar(colors: AvatarColors): Promise<{ avatarHash: 
   const response = await fetch(`${rendererUrl}/render`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ category: "avatars", skin: colors.Head, shirt: colors.Torso, pants: colors.RightLeg, partColors: colors, accessories: [] }),
+    body: JSON.stringify({ category: "avatars", skin: colors.head, shirt: colors.torso, pants: colors.rightLeg, partColors: colors, accessories: [] }),
     signal: AbortSignal.timeout(10_000)
   });
   if (!response.ok) throw new Error(`Avatar renderer returned ${response.status}`);
