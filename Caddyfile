@@ -5,9 +5,21 @@ https://polyworlds.net, https://www.polyworlds.net {
   }
 }
 
-https://assets.polyworlds.net {
+(avatars) {
   handle_path /avatars/* {
     root * /srv/assets/avatars
     file_server
   }
+  handle_path /headshots/* {
+    root * /srv/assets/headshots
+    file_server
+  }
+}
+
+https://assets.polyworlds.net {
+  import avatars
+}
+
+http://localhost {
+  import avatars
 }

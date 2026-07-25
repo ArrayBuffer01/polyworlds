@@ -3,7 +3,7 @@ import { createContext } from "svelte";
 import { browser } from "$app/env";
 import { getMainDomain } from "./domainUtils";
 
-type User = import("lucia").User;
+type User = import("lucia").User & { avatarUrl?: string | null };
 
 export class AppState {
   user = $state<User | null | undefined>(null);

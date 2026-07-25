@@ -216,6 +216,7 @@ type AvatarConfig struct {
 	ShirtTexture string            `json:"shirtTexture"` // catalog ID, e.g. "stripes-01"
 	Pants        string            `json:"pants"`
 	PantsTexture string            `json:"pantsTexture"`
+	PartColors   map[string]string `json:"partColors"`
 	Accessories  []AccessoryConfig `json:"accessories"` // any number of accessories, e.g. hat + glasses + backpack
 }
 
@@ -310,12 +311,17 @@ func loadAccessoryCatalog(dir string) map[string]*Mesh {
 	return result
 }
 
-func renderAvatar(cfg AvatarConfig) []byte {
+func renderAvatar(cfg AvatarConfig, headshot bool) []byte {
 	context := NewContext(width*scale, height*scale)
 	context.ClearColorBuffer() // transparent background, same as your original
 
 	aspect := float64(width) / float64(height)
-	matrix := LookAt(eye, center, up).Perspective(fovy, aspect, near, far)
+	cameraEye, cameraCenter := eye, center
+	if headshot {
+		cameraEye = V(0, 1.4, 4)
+		cameraCenter = V(0, 1.35, 0)
+	}
+	matrix := LookAt(cameraEye, cameraCenter, up).Perspective(fovy, aspect, near, far)
 
 	skin := HexColor(cfg.Skin)
 	shirt := HexColor(cfg.Shirt)
@@ -328,6 +334,9 @@ func renderAvatar(cfg AvatarConfig) []byte {
 		"LeftArm":  skin,
 		"RightLeg": pants,
 		"LeftLeg":  pants,
+	}
+	for material, value := range cfg.PartColors {
+		colors[material] = HexColor(value)
 	}
 
 	// textures only apply to Torso/legs (clothing), not skin — keyed by the
@@ -349,7 +358,7 @@ func renderAvatar(cfg AvatarConfig) []byte {
 
 	// one shader instance, reconfigured per part — a texture takes priority
 	// over the solid color for that part when both are present
-	shader := NewPhongShader(matrix, light, eye)
+	shader := NewPhongShader(matrix, light, cameraEye)
 	context.Shader = shader
 
 	for material, part := range baseAvatar.Parts {
@@ -404,8 +413,9 @@ func configHash(cfg AvatarConfig) string {
 		ShirtTexture string
 		Pants        string
 		PantsTexture string
+		PartColors   map[string]string
 		Accessories  []AccessoryConfig
-	}{cfg.Skin, cfg.Shirt, cfg.ShirtTexture, cfg.Pants, cfg.PantsTexture, cfg.Accessories}
+	}{cfg.Skin, cfg.Shirt, cfg.ShirtTexture, cfg.Pants, cfg.PantsTexture, cfg.PartColors, cfg.Accessories}
 
 	data, _ := json.Marshal(hashable)
 	sum := sha256.Sum256(data)
@@ -413,8 +423,10 @@ func configHash(cfg AvatarConfig) string {
 }
 
 type RenderResult struct {
-	Hash string `json:"hash"`
-	URL  string `json:"url"`
+	Hash         string `json:"hash"`
+	URL          string `json:"url"`
+	HeadshotHash string `json:"headshotHash"`
+	HeadshotURL  string `json:"headshotUrl"`
 }
 
 func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (RenderResult, error) {
@@ -463,7 +475,7 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	imgBytes := renderAvatar(cfg)
+	imgBytes := renderAvatar(cfg, false)
 
 	result, err := saveRenderedPNG(cfg, imgBytes)
 	if err != nil {
@@ -471,6 +483,16 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to save render", http.StatusInternalServerError)
 		return
 	}
+	headshotCfg := cfg
+	headshotCfg.Category = "headshots"
+	headshotResult, err := saveRenderedPNG(headshotCfg, renderAvatar(headshotCfg, true))
+	if err != nil {
+		log.Printf("failed to save avatar headshot: %v", err)
+		http.Error(w, "failed to save render", http.StatusInternalServerError)
+		return
+	}
+	result.HeadshotHash = headshotResult.Hash
+	result.HeadshotURL = headshotResult.URL
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)

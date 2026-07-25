@@ -2,3 +2,6 @@ services:
   db:
     ports:
       - "5431:5432"
+  renderer:
+    ports:
+      - "3001:3001"

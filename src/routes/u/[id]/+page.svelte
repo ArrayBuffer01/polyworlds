@@ -40,7 +40,7 @@
           <img
             src={profile.avatarUrl ?? "/profile.png"}
             alt={`${profile.username}'s avatar`}
-            class="h-24 w-24 shrink-0 rounded-2xl object-cover"
+            class="h-40 w-40 shrink-0 rounded-2xl object-cover"
           />
         </div>
 

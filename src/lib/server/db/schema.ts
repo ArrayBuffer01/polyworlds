@@ -21,6 +21,16 @@ export const usersTable = pgTable("user", {
   lastReward: timestamp("last_reward"),
   bio: varchar("bio", { length: 2000 }),
   avatarHash: varchar("avatar_hash", { length: 12 }),
+  avatarSkin: varchar("avatar_skin", { length: 7 }),
+  avatarShirt: varchar("avatar_shirt", { length: 7 }),
+  avatarPants: varchar("avatar_pants", { length: 7 }),
+  avatarHeadshotHash: varchar("avatar_headshot_hash", { length: 12 }),
+  avatarHead: varchar("avatar_head", { length: 7 }),
+  avatarTorso: varchar("avatar_torso", { length: 7 }),
+  avatarRightArm: varchar("avatar_right_arm", { length: 7 }),
+  avatarLeftArm: varchar("avatar_left_arm", { length: 7 }),
+  avatarRightLeg: varchar("avatar_right_leg", { length: 7 }),
+  avatarLeftLeg: varchar("avatar_left_leg", { length: 7 }),
   loginStreak: integer("login_streak").default(1),
   lastLogin: timestamp("last_login").notNull().defaultNow()
 });

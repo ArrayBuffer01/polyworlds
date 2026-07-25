@@ -71,7 +71,7 @@
             <span>{appState.user.username}</span>
             <img
               alt="Profile"
-              src="/profile.png"
+              src={appState.user.avatarUrl ?? "/profile.png"}
               class="ml-2 h-10 w-10 rounded-full border border-neutral-250"
             />
           </button>
@@ -91,7 +91,7 @@
               <li
                 class="cursor-pointer px-4 py-2 font-semibold text-plw-black transition duration-100 select-none hover:bg-zinc-100"
               >
-                Settings
+                <a class="w-full" href="/avatar">Edit Avatar</a>
               </li>
               <hr class="m-2 mr-5 ml-5 justify-center text-gray-200" />
               <li

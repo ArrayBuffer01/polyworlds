@@ -22,6 +22,20 @@
       "when": 1784982143216,
       "tag": "0002_add_avatar_hash",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784984000000,
+      "tag": "0003_add_avatar_colors",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1784985000000,
+      "tag": "0004_add_avatar_part_colors_and_headshot",
+      "breakpoints": true
     }
   ]
 }

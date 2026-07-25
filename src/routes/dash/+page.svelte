@@ -116,7 +116,11 @@
     <aside class="flex-1">
       <!-- Left side -->
       <div class="flex items-center gap-2">
-        <img src="/profile.png" alt="Profile" class="h-16 w-16 rounded-2xl" />
+        <img
+          src={appState.user?.avatarUrl ?? "/profile.png"}
+          alt="Profile"
+          class="h-16 w-16 rounded-2xl"
+        />
         <h1 class="scroll-m-20 text-3xl font-light tracking-tight transition-colors first:mt-0">
           Welcome, {appState.user?.username}
         </h1>

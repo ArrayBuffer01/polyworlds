@@ -7,7 +7,7 @@ import { usersTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getMainDomain } from "$lib/domainUtils";
-import { renderDefaultAvatar } from "$lib/server/avatarRenderer";
+import { defaultAvatarColors, renderDefaultAvatar } from "$lib/server/avatarRenderer";
 
 export const load = (async () => {
   return {};
@@ -46,9 +46,9 @@ export const actions = {
 
     const passwordHash = bcrypt.hashSync(password, 10);
 
-    let avatarHash: string;
+    let avatarHashes: { avatarHash: string; headshotHash: string };
     try {
-      avatarHash = await renderDefaultAvatar();
+      avatarHashes = await renderDefaultAvatar();
     } catch (error) {
       console.error("Default avatar rendering failed:", error);
       return fail(503, {
@@ -62,7 +62,17 @@ export const actions = {
         username,
         email,
         passwordHash,
-        avatarHash,
+        avatarHash: avatarHashes.avatarHash,
+        avatarHeadshotHash: avatarHashes.headshotHash,
+        avatarSkin: defaultAvatarColors.Head,
+        avatarShirt: defaultAvatarColors.Torso,
+        avatarPants: defaultAvatarColors.RightLeg,
+        avatarHead: defaultAvatarColors.Head,
+        avatarTorso: defaultAvatarColors.Torso,
+        avatarRightArm: defaultAvatarColors.RightArm,
+        avatarLeftArm: defaultAvatarColors.LeftArm,
+        avatarRightLeg: defaultAvatarColors.RightLeg,
+        avatarLeftLeg: defaultAvatarColors.LeftLeg,
         createdAt: new Date(),
         gold: 0,
         coins: 0

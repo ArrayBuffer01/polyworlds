@@ -3,6 +3,7 @@ export interface User {
   username: string;
   createdAt: Date;
   bio: string | null;
+  avatarUrl?: string | null;
 }
 
 export interface Feed {

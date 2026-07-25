@@ -15,7 +15,7 @@
         <div class="flex gap-2">
           <img
             alt="Profile"
-            src="/profile.png"
+            src={user.avatarUrl ?? "/profile.png"}
             class="h-10 w-10 rounded-full border border-plw-gray"
           />
           <div class="font-semibold">

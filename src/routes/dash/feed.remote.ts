@@ -3,6 +3,7 @@ import { db } from "$lib/server/db";
 import { userFeedTable, usersTable } from "$lib/server/db/schema";
 import { desc, eq } from "drizzle-orm";
 import * as z from "zod";
+import { headshotUrlForHash } from "$lib/server/avatarRenderer";
 
 export const postFeed = form(
   z.object({
@@ -36,6 +37,6 @@ export const getFeeds = query(async () => {
     .limit(15);
   return feeds.map((feed) => ({
     feed: feed.user_feed,
-    user: feed.user
+    user: { ...feed.user, avatarUrl: headshotUrlForHash(feed.user.avatarHeadshotHash) }
   }));
 });
