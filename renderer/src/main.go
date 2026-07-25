@@ -328,12 +328,12 @@ func renderAvatar(cfg AvatarConfig, headshot bool) []byte {
 	pants := HexColor(cfg.Pants)
 
 	colors := map[string]Color{
-		"head":     skin,
-		"torso":    shirt,
-		"rightArm": skin,
-		"leftArm":  skin,
-		"rightLeg": pants,
-		"leftLeg":  pants,
+		"Head":     skin,
+		"Torso":    shirt,
+		"RightArm": skin,
+		"LeftArm":  skin,
+		"RightLeg": pants,
+		"LeftLeg":  pants,
 	}
 	for material, value := range cfg.PartColors {
 		colors[material] = HexColor(value)
