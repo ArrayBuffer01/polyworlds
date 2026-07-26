@@ -45,7 +45,7 @@
                 id="username"
                 type="text"
                 name="username"
-                placeholder="Username"
+                placeholder="Enter your username here"
                 autocomplete="off"
                 required
               />
@@ -54,7 +54,7 @@
               <div class="flex items-center">
                 <Label for="password">Password</Label>
               </div>
-              <Input id="password" type="password" name="password" autocomplete="off" required />
+              <Input placeholder="Enter your password here" id="password" type="password" name="password" autocomplete="off" required />
             </div>
           </div>
           <Button type="submit" class="mt-3 w-full"

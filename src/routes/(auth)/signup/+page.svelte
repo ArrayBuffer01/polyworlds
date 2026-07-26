@@ -75,7 +75,7 @@
                 id="username"
                 type="text"
                 name="username"
-                placeholder="Username"
+                placeholder="Enter your username here"
                 aria-invalid={fieldErrors.username.length > 0}
                 autocomplete="off"
                 required
@@ -94,7 +94,7 @@
                 id="email"
                 type="email"
                 aria-invalid={fieldErrors.email.length > 0}
-                placeholder="email@example.com"
+                placeholder="Enter your email here: mail@example.com"
                 autocomplete="off"
                 name="email"
                 required
@@ -116,6 +116,7 @@
                 type="password"
                 aria-invalid={fieldErrors.password.length > 0}
                 name="password"
+                placeholder="Enter your password here"
                 autocomplete="off"
                 required
               />
