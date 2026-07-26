@@ -3,12 +3,7 @@
   import type { PageProps } from "./$types";
   import ChevronRight from "@lucide/svelte/icons/chevron-right";
 
-  import { enhance } from "$app/forms";
-  import { Button } from "$lib/components/ui/button";
   import * as Card from "$lib/components/ui/card/index.js";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { Spinner } from "$lib/components/ui/spinner";
 
   let { data }: PageProps = $props();
 
