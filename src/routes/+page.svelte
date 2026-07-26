@@ -35,7 +35,7 @@
       >
     </Card.Header>
     <Card.Content class="flex">
-      {#if !appState.user}
+      {#if !appState.isLoggedIn}
         <a
           class="mr-2 w-full rounded-md bg-plw-red px-6 py-2 text-center font-medium text-white"
           href="/login">Login</a
