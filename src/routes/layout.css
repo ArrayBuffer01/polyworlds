@@ -130,7 +130,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply transition-colors duration-450;
+    @apply transition-colors duration-600;
   }
   body {
     @apply bg-background text-foreground;
