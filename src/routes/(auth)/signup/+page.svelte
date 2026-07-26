@@ -84,9 +84,6 @@
         <form
           action="?/signup"
           method="POST"
-          oninput={() => {
-            checkUsername();
-          }}
           use:enhance={() => {
             clearErrors();
             loading = true;
@@ -102,6 +99,9 @@
               <Input
                 id="username"
                 type="text"
+                oninput={() => {
+                  checkUsername();
+                }}
                 name="username"
                 bind:value={username}
                 placeholder="Enter your username here"
@@ -126,9 +126,7 @@
                     Username is not available. Please try another one.
                   </p>
                 {:else}
-                  <p class="text-sm text-emerald-600">
-                    Username is available.
-                  </p>
+                  <p class="text-sm text-emerald-600">Username is available.</p>
                 {/if}
               {:else}
                 <p class="text-sm text-muted-foreground">
