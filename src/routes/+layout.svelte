@@ -40,14 +40,6 @@
   />
 </svelte:head>
 
-{#if page.url.pathname != "/login" && page.url.pathname != "/signup" && page.url.pathname != "/"}
-  {#if appState.landingPageActive}
-    <LandingNav />
-  {:else}
-    <Navbar />
-  {/if}
-{/if}
-
 <main class="grow">
   {@render children()}
 </main>

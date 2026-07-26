@@ -2,7 +2,7 @@
   let { title = $bindable("UNDER CONSTRUCTION!") } = $props();
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-white px-6">
+<div class="flex min-h-screen items-center justify-center px-6">
   <div class="w-full max-w-md text-center">
     <h1 class="font-super-bouncer text-5xl tracking-tighter text-plw-red select-none sm:text-6xl">
       {title}
@@ -14,10 +14,10 @@
       <div class="border-plw-accent h-px flex-1 border-t-2 border-dashed"></div>
     </div>
 
-    <p class="sm:text-md mt-4 text-base leading-relaxed text-gray-500">
+    <p class="sm:text-md mt-4 text-base leading-relaxed text-muted-foreground">
       This page is currently under construction.
     </p>
-    <p class="sm:text-md text-base leading-relaxed text-gray-500">
+    <p class="sm:text-md text-base leading-relaxed text-muted-foreground">
       We’re working hard to bring it to life. Check back soon!
     </p>
     <a
