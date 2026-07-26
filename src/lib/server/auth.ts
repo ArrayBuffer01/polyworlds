@@ -24,7 +24,9 @@ export const lucia = new Lucia(adapter, {
     lastLogin: data.lastLogin,
     avatarHash: data.avatarHash,
     avatarHeadshotHash: data.avatarHeadshotHash,
-    role: data.role
+    role: data.role,
+    lastUsedIPHash: data.lastUsedIPHash,
+    registrationIPHash: data.registrationIPHash
   })
 });
 
@@ -50,4 +52,6 @@ interface DatabaseUserAttributes {
   avatarHash: string | null;
   avatarHeadshotHash: string | null;
   role: UserRole;
+  lastUsedIPHash: string;
+  registrationIPHash: string;
 }

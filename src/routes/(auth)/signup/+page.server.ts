@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getMainDomain } from "$lib/domainUtils";
 import { defaultAvatarColors, renderDefaultAvatar } from "$lib/server/avatarRenderer";
+import { hashIP } from "$lib/server/hashing";
 
 export const load = (async () => {
   return {};
@@ -23,7 +24,7 @@ const registerSchema = z.object({
 });
 
 export const actions = {
-  signup: async ({ request, cookies, url }) => {
+  signup: async ({ request, cookies, url, getClientAddress }) => {
     const formData = Object.fromEntries(await request.formData());
 
     const parsed = z.safeParse(registerSchema, formData);
@@ -56,6 +57,8 @@ export const actions = {
       });
     }
 
+    const ipHash = hashIP(getClientAddress());
+    
     const newUser = await db
       .insert(usersTable)
       .values({
@@ -75,7 +78,9 @@ export const actions = {
         avatarLeftLeg: defaultAvatarColors.LeftLeg,
         createdAt: new Date(),
         gold: 0,
-        coins: 0
+        coins: 0,
+        registrationIPHash: ipHash,
+        lastUsedIPHash: ipHash
       })
       .returning();
 

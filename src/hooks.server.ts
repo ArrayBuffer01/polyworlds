@@ -1,11 +1,11 @@
 import { getMainDomain } from "$lib/domainUtils";
 import { lucia } from "$lib/server/auth";
-import { updateLoginStreak } from "$lib/server/loginStreak";
+import { updateIPHash, updateLoginStreak } from "$lib/server/databaseHelper";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
   const sessionId = event.cookies.get(lucia.sessionCookieName);
-
+  
   if (sessionId) {
     const { session, user } = await lucia.validateSession(sessionId);
 
@@ -29,9 +29,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     if (user) {
       user.loginStreak = await updateLoginStreak(user);
+      user.lastUsedIPHash = await updateIPHash(user, event.getClientAddress());
 
       event.locals.user = user ?? undefined;
       event.locals.session = session ?? undefined;
+      
+      console.log(user.username + " -> " + event.getClientAddress());
     }
   }
 

@@ -5,6 +5,7 @@
   import { Spinner } from "$lib/components/ui/spinner/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
+  import { Debouncer } from "$lib/debouncer.js";
 
   interface FormErrors {
     username: string[];
@@ -17,10 +18,34 @@
 
   let fieldErrors = $state<FormErrors>({ username: [], email: [], password: [] });
 
+  let usernameAvailable = $state(false);
+  let checkingUsername = $state(false);
+  let username = $state("");
+
+  const debouncer = new Debouncer(debouncedCheckUsername, 400);
+
   function clearErrors() {
     fieldErrors.username = [];
     fieldErrors.email = [];
     fieldErrors.password = [];
+  }
+
+  function checkUsername() {
+    checkingUsername = true;
+    debouncer.call();
+  }
+
+  async function debouncedCheckUsername() {
+    const res = await fetch("/api/auth/username/check/" + username);
+    const data = await res.json();
+
+    checkingUsername = false;
+
+    if (data.available) {
+      usernameAvailable = true;
+    } else {
+      usernameAvailable = false;
+    }
   }
 
   $effect(() => {
@@ -59,6 +84,9 @@
         <form
           action="?/signup"
           method="POST"
+          oninput={() => {
+            checkUsername();
+          }}
           use:enhance={() => {
             clearErrors();
             loading = true;
@@ -75,8 +103,10 @@
                 id="username"
                 type="text"
                 name="username"
+                bind:value={username}
                 placeholder="Enter your username here"
-                aria-invalid={fieldErrors.username.length > 0}
+                aria-invalid={fieldErrors.username.length > 0 ||
+                  (!checkingUsername && !usernameAvailable && username.trim() != "")}
                 autocomplete="off"
                 required
               />
@@ -86,6 +116,24 @@
                     {err}
                   </p>
                 {/each}
+              {/if}
+
+              {#if username.length > 0}
+                {#if checkingUsername}
+                  <p class="text-sm text-muted-foreground">Checking username...</p>
+                {:else if !usernameAvailable}
+                  <p class="text-sm text-destructive">
+                    Username is not available. Please try another one.
+                  </p>
+                {:else}
+                  <p class="text-sm text-emerald-600">
+                    Username is available.
+                  </p>
+                {/if}
+              {:else}
+                <p class="text-sm text-muted-foreground">
+                  Type a username to check if it's available.
+                </p>
               {/if}
             </div>
             <div class="grid gap-2">

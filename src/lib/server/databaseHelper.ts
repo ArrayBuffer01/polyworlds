@@ -3,6 +3,7 @@ import type { User } from "lucia";
 import { db } from "./db";
 import { usersTable } from "./db/schema";
 import { eq } from "drizzle-orm";
+import { hashIP } from "./hashing";
 
 export async function updateLoginStreak(user: User) {
   const now = new Date();
@@ -24,4 +25,14 @@ export async function updateLoginStreak(user: User) {
   }
 
   return streak;
+}
+
+export async function updateIPHash(user: User, newIPAdress: string) {
+  const ipHash = hashIP(newIPAdress);
+
+  if (ipHash != user.lastUsedIPHash) {
+    await db.update(usersTable).set({ lastUsedIPHash: ipHash }).where(eq(usersTable.id, user.id));
+  }
+
+  return ipHash;
 }

@@ -12,7 +12,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { UserRole } from "../../../types/User";
 
-
 export const userRoleEnum = pgEnum("user_role", [UserRole.User, UserRole.Admin]);
 
 export const usersTable = pgTable("user", {
@@ -38,8 +37,12 @@ export const usersTable = pgTable("user", {
   avatarLeftLeg: varchar("avatar_left_leg", { length: 7 }),
   loginStreak: integer("login_streak").default(1),
   lastLogin: timestamp("last_login").notNull().defaultNow(),
-  role: userRoleEnum("role").notNull().default(UserRole.User)
+  role: userRoleEnum("role").notNull().default(UserRole.User),
+  registrationIPHash: varchar("registration_ip_hash", { length: 64 }),
+  lastUsedIPHash: varchar("registration_ip_hash", { length: 64 }),
+  emailVerified: boolean("email_verified").default(false)
 });
+
 
 export const userRelations = relations(usersTable, ({ many }) => ({
   sessions: many(sessionTable),
@@ -47,8 +50,16 @@ export const userRelations = relations(usersTable, ({ many }) => ({
   createdMedals: many(medalsTable),
   ownedMedals: many(ownedMedalsTable),
   posts: many(forumPostsTable),
-  replies: many(forumPostRepliesTable)
+  replies: many(forumPostRepliesTable),
+  emailHistory: many(emailHistoryTable)
 }));
+
+export const emailHistoryTable = pgTable("email_history", {
+  id: serial("id").primaryKey(),
+  userId: serial("user_id").notNull(),
+  email: varchar("email", { length: 255 }),
+  verifiedAt: timestamp("verified_at").notNull().defaultNow()
+});
 
 export const sessionTable = pgTable("sessions", {
   id: text("id").primaryKey(),
@@ -107,9 +118,17 @@ export const ownedMedalsTable = pgTable(
   (table) => [primaryKey({ columns: [table.userId, table.medalId] })]
 );
 
+
 export const userFeedRelations = relations(userFeedTable, ({ one }) => ({
   user: one(usersTable, {
     fields: [userFeedTable.userId],
+    references: [usersTable.id]
+  })
+}));
+
+export const emailhistoryRelations = relations(emailHistoryTable, ({one}) => ({
+  user: one(usersTable, {
+    fields: [emailHistoryTable.userId],
     references: [usersTable.id]
   })
 }));
