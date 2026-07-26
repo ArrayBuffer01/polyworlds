@@ -16,6 +16,10 @@ export class AppState {
     }
   }
 
+  toggleTheme() {
+    this.theme = this.theme === "dark" ? "light" : "dark";
+  }
+
   get theme() {
     return this.#currentTheme;
   }
