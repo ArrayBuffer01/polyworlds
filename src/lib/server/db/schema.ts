@@ -10,11 +10,8 @@ import {
   boolean,
   pgEnum
 } from "drizzle-orm/pg-core";
+import { UserRole } from "../../../types/User";
 
-export enum UserRole {
-  User = "user",
-  Admin = "admin"
-}
 
 export const userRoleEnum = pgEnum("user_role", [UserRole.User, UserRole.Admin]);
 

@@ -10,3 +10,9 @@ export interface Feed {
   content: string;
   createdAt: Date;
 }
+
+
+export enum UserRole {
+  User = "user",
+  Admin = "admin"
+}
