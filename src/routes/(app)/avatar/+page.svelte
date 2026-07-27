@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import * as Alert from "$lib/components/ui/alert/index";
   import type { PageProps } from "./$types";
   import { Button } from "$lib/components/ui/button";
   import { Spinner } from "$lib/components/ui/spinner";
@@ -24,11 +25,18 @@
 
 <svelte:head><title>Avatar Editor | Polyworlds</title></svelte:head>
 <main class="container mx-auto max-w-4xl p-20">
+  {#if !data.isRendererUp}
+    <Alert.Root variant="destructive" class="mb-4">
+      <Alert.Title>Avatar rendering down</Alert.Title>
+      <Alert.Description>
+        <p>Polyworlds renderer is currently not available. Please try again later.</p>
+      </Alert.Description>
+    </Alert.Root>
+  {/if}
   <div class="rounded border p-6 hover:border-plw-red">
     <h1 class="text-3xl font-light">Edit your avatar</h1>
-    <p class="mt-2 text-muted-foreground">
-      For now colors only I guess
-    </p>
+    <p class="mt-2 text-muted-foreground">For now colors only I guess</p>
+
     <div class="mt-6 grid gap-8 md:grid-cols-[1fr_260px]">
       <form
         method="POST"

@@ -26,6 +26,21 @@ export function headshotUrlForHash(hash: string | null): string | null {
   return hash ? `${assetBaseUrl}/headshots/${hash}.png` : null;
 }
 
+interface HealthResponse {
+  success: boolean;
+}
+
+export async function checkHealth(): Promise<boolean> {
+  try {
+    const res = await fetch(`${rendererUrl}/health`);
+    const data: HealthResponse = await res.json();
+    return res.ok && data.success;
+  } catch(err) {
+    console.log("Health check for renderer API failed: ", err);
+    return false;
+  }
+}
+
 export async function renderAvatar(
   colors: AvatarColors
 ): Promise<{ avatarHash: string; headshotHash: string }> {

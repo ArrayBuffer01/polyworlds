@@ -5,6 +5,7 @@ import { usersTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import {
   avatarUrlForHash,
+  checkHealth,
   defaultAvatarColors,
   headshotUrlForHash,
   renderAvatar,
@@ -25,6 +26,7 @@ const avatarSchema = z.object({
 export const load = (async ({ locals }) => {
   if (!locals.user) redirect(303, "/login");
   const user = await db.query.usersTable.findFirst({ where: eq(usersTable.id, locals.user.id) });
+  const isRendererUp = await checkHealth();
   const colors: AvatarColors = {
     Head: user?.avatarHead ?? user?.avatarSkin ?? defaultAvatarColors.Head,
     Torso: user?.avatarTorso ?? user?.avatarShirt ?? defaultAvatarColors.Torso,
@@ -36,7 +38,8 @@ export const load = (async ({ locals }) => {
   return {
     colors,
     avatarUrl: avatarUrlForHash(user?.avatarHash ?? null),
-    headshotUrl: headshotUrlForHash(user?.avatarHeadshotHash ?? null)
+    headshotUrl: headshotUrlForHash(user?.avatarHeadshotHash ?? null),
+    isRendererUp
   };
 }) satisfies PageServerLoad;
 
@@ -68,7 +71,9 @@ export const actions = {
       };
     } catch (error) {
       console.error("Avatar rendering failed:", error);
-      return fail(503, { error: "Avatar creation is temporarily unavailable. Please try again." });
+      return fail(503, {
+        error: "Avatar rendering is currently unavailable. Please try again later."
+      });
     }
   }
 } satisfies Actions;

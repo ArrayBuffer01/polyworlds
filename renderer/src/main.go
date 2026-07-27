@@ -194,8 +194,8 @@ var (
 	defaultColor = HexColor("#E7E7E7FF")
 
 	// Resolved once at startup from environment variables.
-	assetsDir  string
-	baseURL    string
+	assetsDir   string
+	baseURL     string
 	texturesDir string
 
 	baseAvatar  *AvatarMesh
@@ -434,6 +434,10 @@ type RenderResult struct {
 	HeadshotURL  string `json:"headshotUrl"`
 }
 
+type HealthResult struct {
+	Success bool `json:"success"`
+}
+
 func saveRenderedPNG(cfg AvatarConfig, pngBytes []byte) (RenderResult, error) {
 	category := cfg.Category
 	if category == "" {
@@ -533,6 +537,12 @@ func handleRender(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(HealthResult{Success: true})
+}
+
 func main() {
 	assetsDir = envOr("ASSETS_DIR", "/assets")
 	baseURL = os.Getenv("ASSET_BASE_URL")
@@ -554,6 +564,7 @@ func main() {
 	log.Printf("indexed %d catalog textures (loaded lazily on first use)", len(textureIndex))
 
 	http.HandleFunc("/render", handleRender)
+	http.HandleFunc("/health", handleHealth)
 	http.HandleFunc("/textures", handleTextures)
 	http.HandleFunc("/textures/reload", handleReloadTextures)
 	log.Println("avatar-renderer listening on :3001")
